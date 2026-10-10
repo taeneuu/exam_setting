@@ -1,11 +1,11 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>시험장 세팅 도우미</title>
+<title>시험실 세팅 도우미</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Gothic+A1:wght@900&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Nanum+Gothic:wght@800&family=Noto+Sans+KR:wght@900&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-/* 시험장 세팅 도우미 (구 시험 준비 도우미·시험 시간표 메이커) — 저장 키·데이터 구조는 예전 그대로 유지 */
+/* 시험실 세팅 도우미 (구 시험 준비 도우미·시험 시간표 메이커) — 저장 키·데이터 구조는 예전 그대로 유지 */
 :root{
   --bg:#eef1f3; --surface:#ffffff; --surface-2:#f6f8f9; --ink:#17202a; --muted:#5d6b78;
   --line:#d5dce2; --accent:#1d5c8f; --accent-ink:#ffffff; --accent-soft:#e3eef7;
@@ -309,7 +309,7 @@ details.subjbox > summary:hover h3{color:var(--accent)}
 
 <div class="wrap" id="app" data-app="tt">
   <header class="top">
-    <h1>시험장 세팅 도우미</h1>
+    <h1>시험실 세팅 도우미</h1>
     <span class="sub">시험 일정부터 교실별 좌석 배치까지</span>
     <div class="status" id="status" data-s="idle" role="status"><span class="dot"></span><span id="statusText">불러오는 중…</span><button class="btn" id="retrySave" hidden style="padding:2px 8px;font-size:12px">다시 저장</button></div>
     <span class="credit">제작 : 이태형T(한백고)</span>
@@ -361,8 +361,7 @@ function emptyState(){
     defaultTimes:["09:20~10:10","10:30~11:20","11:40~12:30"],
     days:[],
     rooms:[
-      {id:uid(), label:"1학년 교실", grades:["1","3"]},
-      {id:uid(), label:"2학년 교실", grades:["1","2"]}
+      {id:uid(), label:"1학년 교실", grades:["1","2"]}
     ],
     paper:"B4", font:"Noto Sans KR", hideEmpty:true,
     examTitle:"", showTitle:true, showRoom:true, rangeStart:"", rangeEnd:"", lastExam:null, codeBook:"",
@@ -1460,7 +1459,8 @@ function newRoom(label, groups){
     mode:"alt", start:"left", assign:null, print:true, fixed:1};
 }
 function seatDefault(title){
-  const r = newRoom("2-3교실", [newGroup(1,3,20,[7,15]), newGroup(2,3,36,[28],20)]);
+  const r = newRoom("1-3교실", [newGroup(1,3,35,[],21), newGroup(2,3,19,[4])]);
+  r.fixed = 0; // 예시: 1-3 고정, 2-3 이동
   r.cells.forEach((cell, i) => cell.tag = (i % r.cols) % 2 ? "고정" : "이동"); // 예시: 열마다 이동·고정 번갈아
   return {v:1, examTitle: title || "", paper:"B4", rooms:[r], templates:[], active:r.id, example:true};
 }
@@ -1661,7 +1661,7 @@ function seatRoomView(){
       <p class="hint" style="margin-top:8px">제목은 “${esc(seatTitle(seat.examTitle))}”로 찍혀요. 자리 배치는 시간표와 따로 저장돼서, 여기서 바꿔도 시간표는 그대로예요. ‘새 시험 준비’는 <b>모든 시험실</b>의 교실 구조·응시 집단은 두고 결번과 직접 고친 자리만 지워요.</p>
     </div>
     ${seatConfirmBox()}
-    ${seat.example ? `<div class="warnline" style="margin-bottom:14px">처음에는 <b>예시 시험실</b>(2-3교실: 1-3 + 2-3)이 들어 있어요. 학년·반·번호·결번을 이번 시험에 맞게 바꿔 쓰세요.</div>` : ""}
+    ${seat.example ? `<div class="warnline" style="margin-bottom:14px">처음에는 <b>예시 시험실</b>(1-3교실: 1-3 + 2-3)이 들어 있어요. 학년·반·번호·결번을 이번 시험에 맞게 바꿔 쓰세요.</div>` : ""}
     ${seatMsg ? `<div class="warnline" style="margin-bottom:14px">${esc(seatMsg)}</div>` : ""}
     ${roomBar()}
     <div class="seat-2col">
@@ -2561,8 +2561,8 @@ function onMainChange(e){
 const footMsg = document.getElementById("footMsg"), importBox = document.getElementById("importBox");
 // 기존 형식(시간표 필드가 최상위)을 그대로 두고 자리 배치는 seatPlans 키에만 담음 → 예전 파일·예전 앱과 호환
 async function doExport(){
-  const out = Object.assign({app:"시험장 세팅 도우미", exportedAt: new Date().toISOString()}, state); if(seat) out.seatPlans = seat;
-  const data = JSON.stringify(out, null, 2), name = `시험장세팅도우미_백업_${toISO(new Date())}_${hhmm(new Date()).replace(":","")}.json`;
+  const out = Object.assign({app:"시험실 세팅 도우미", exportedAt: new Date().toISOString()}, state); if(seat) out.seatPlans = seat;
+  const data = JSON.stringify(out, null, 2), name = `시험실세팅도우미_백업_${toISO(new Date())}_${hhmm(new Date()).replace(":","")}.json`;
   const dl = await cap("downloads");
   if(dl){
     try { await dl.save({filename:name, data}); flash(`백업 파일을 저장했어요 · ${name}`); return true; }
@@ -2619,7 +2619,7 @@ document.getElementById("importJson").addEventListener("change", async e => {
       if(sp.active && !rid.has(sp.active)) notes.push("선택돼 있던 시험실이 파일에 없어 첫 시험실을 선택해요.");
     }
     pendingImport.notes = notes;
-    if(!pendingImport.tt && !pendingImport.seat) throw new Error("시험장 세팅 도우미 백업 파일이 아니에요 (예전 이름: 시험 준비 도우미·시험 시간표 메이커) — 시간표(subjects)나 자리 배치(seatPlans) 데이터가 없어요.");
+    if(!pendingImport.tt && !pendingImport.seat) throw new Error("시험실 세팅 도우미 백업 파일이 아니에요 (예전 이름: 시험 준비 도우미·시험 시간표 메이커) — 시간표(subjects)나 자리 배치(seatPlans) 데이터가 없어요.");
   } catch(err){ pendingImport = {name: f.name, error: err && err.message || "파일을 읽지 못했어요."}; }
   showImportBox(); importBox.scrollIntoView({block:"nearest"});
 });

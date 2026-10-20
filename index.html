@@ -540,6 +540,24 @@ details.faq p{margin:8px 0 0;color:var(--muted);font-size:13.5px}
 .mbrand .logo{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--accent);color:#fff}
 .mbrand .logo svg{width:17px;height:17px}
 @media (max-width:900px){.mbrand{display:flex}}
+
+.status .rst{appearance:none;border:0;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;padding:0;margin-left:2px}
+.status .rst:hover{color:var(--danger);background:var(--accent-soft)}
+.status .rst svg{width:14px;height:14px}
+a.iconbtn{text-decoration:none}
+.bookcols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.bookcols{grid-template-columns:1fr}}
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(30,20,10,.45);padding:16px}
+.modal[hidden]{display:none}
+.modalbox{background:var(--surface);border-radius:18px;padding:22px;max-width:460px;width:100%;display:flex;flex-direction:column;gap:12px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modalbox h3{margin:0;font-size:17px;font-weight:800}
+.tut[hidden]{display:none}
+.tutblock{position:fixed;inset:0;z-index:90}
+.tuthl{position:fixed;z-index:91;border-radius:12px;box-shadow:0 0 0 9999px rgba(20,12,5,.58);outline:3px solid var(--accent);pointer-events:none;transition:left .18s,top .18s,width .18s,height .18s}
+.tutpop{position:fixed;z-index:92;background:var(--surface);color:var(--ink);border-radius:16px;padding:16px 18px;box-shadow:0 12px 40px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:6px}
+.tutpop b{font-size:16px;font-weight:800}
+.tutpop p{margin:0;font-size:13.5px;line-height:1.55}
+.tutcount{font-size:11.5px;font-weight:700;color:var(--accent)}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -557,6 +575,8 @@ details.faq p{margin:8px 0 0;color:var(--muted);font-size:13.5px}
   <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
   <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V3h6v1M9 11.5l2 2 4-4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></symbol>
 </svg>
 <div class="shell" id="shell" data-page="home">
   <aside class="sidenav" aria-label="메뉴">
@@ -572,9 +592,10 @@ details.faq p{margin:8px 0 0;color:var(--muted);font-size:13.5px}
   <div class="content">
     <header class="topbar">
       <div class="pagetitle" id="pageTitle"></div>
-      <div class="status" id="status" data-s="idle" role="status"><span class="dot"></span><span id="statusText">불러오는 중…</span><button class="btn" id="retrySave" hidden style="padding:2px 8px;font-size:12px;min-height:0">다시 저장</button><span class="qtip r" tabindex="0" aria-label="저장 위치 안내">?<span class="qbox" role="tooltip" id="storeTip"></span></span></div>
+      <div class="status" id="status" data-s="idle" role="status"><span class="dot"></span><span id="statusText">불러오는 중…</span><button class="btn" id="retrySave" hidden style="padding:2px 8px;font-size:12px;min-height:0">다시 저장</button><button class="rst" id="resetBtn" aria-label="저장된 데이터 모두 지우기" title="저장된 데이터 모두 지우기"><svg><use href="#i-trash"/></svg></button><span class="qtip r" tabindex="0" aria-label="저장 위치 안내">?<span class="qbox" role="tooltip" id="storeTip"></span></span></div>
       <button class="iconbtn" id="themeBtn" aria-label="화면 테마 바꾸기" title="밝게 / 어둡게"><svg><use href="#i-sun"/></svg></button>
-      <span class="who"><span class="avatar" aria-hidden="true">T</span><span class="credit">이태형T</span></span>
+      <a class="iconbtn" id="feedbackBtn" href="https://github.com/taeneuu/exam_setting/issues/new" target="_blank" rel="noopener" aria-label="건의 · 오류 신고" title="건의 · 오류 신고"><svg><use href="#i-chat"/></svg></a>
+      
     </header>
     <div class="wrap" id="app" data-app="tt">
       <div class="navrow" id="navrow"><nav class="tabs" role="tablist" id="tabs"></nav><button class="btn ghost" id="undoBtn" hidden></button></div>
@@ -646,7 +667,7 @@ function emptyState(){
       {id:uid(), label:"1학년 교실", grades:["1","2"]}
     ],
     paper:"B4", font:"Noto Sans KR", hideEmpty:true,
-    examTitle:"", showTitle:true, showRoom:true, rangeStart:"", rangeEnd:"", lastExam:null, codeBook:"",
+    examTitle:"", showTitle:true, showRoom:true, rangeStart:"", rangeEnd:"", lastExam:null, codeBook:"", customBooks:{},
     excludeDates:[], archive:[]
   };
 }
@@ -664,8 +685,9 @@ const CODE_BOOKS = {
   }}
 };
 const CODE_BOOK_LATEST = "2026-2";
-const bookOf = id => CODE_BOOKS[id] || CODE_BOOKS["2026-1"];
-const curBookId = () => CODE_BOOKS[state.codeBook] ? state.codeBook : "2026-1";
+const allBooks = () => Object.assign({}, CODE_BOOKS, (typeof state !== "undefined" && state && state.customBooks) || {});
+const bookOf = id => allBooks()[id] || CODE_BOOKS["2026-1"];
+const curBookId = () => allBooks()[state.codeBook] ? state.codeBook : "2026-1";
 const bookCount = id => ["1","2","3"].reduce((n,g) => n + bookOf(id).data[g].length, 0);
 // 띄어쓰기·가운뎃점·로마숫자 표기가 달라도 같은 과목으로 봄 (영어독해와 작문 = 영어 독해와 작문, 물리학II = 물리학Ⅱ)
 const normName = s => String(s || "").replace(/\s+/g,"").replace(/[・·•ㆍ‧∙.]/g,"").replace(/Ⅲ/g,"III").replace(/Ⅱ/g,"II").replace(/Ⅰ/g,"I").toLowerCase();
@@ -693,12 +715,13 @@ function normalize(d){
   s.days.forEach(day => { if(!Array.isArray(day.periods)) day.periods = [];
     day.periods.forEach(p => { p.g = Object.assign({"1":[],"2":[],"3":[]}, p.g || {}); }); });
   if(!Array.isArray(s.rooms) || !s.rooms.length) s.rooms = emptyState().rooms;
+  { const cb = {}; if(s.customBooks && typeof s.customBooks === "object") Object.keys(s.customBooks).forEach(id => { const b = s.customBooks[id]; if(!b || typeof b.title !== "string" || !b.data || typeof b.data !== "object") return; const data = {}; ["1","2","3"].forEach(g => { data[g] = (Array.isArray(b.data[g]) ? b.data[g] : []).filter(x => Array.isArray(x) && x[0]).map(x => [String(x[0]), String(x[1] || "")]); }); cb[id] = {title: b.title.slice(0,60), data}; }); s.customBooks = cb; }
   if(!PAPERS[s.paper]) s.paper = "B4";
   if(!FONTS[s.font]) s.font = "Noto Sans KR";
   // 기본 글꼴을 본고딕 Black으로 바꾼 뒤 처음 한 번만, 예전 기본값(검은고딕)을 새 기본값으로 맞춤 (그 뒤 직접 고른 글꼴은 유지)
   if(!s.fontDefault2){ if(s.font === "Black Han Sans") s.font = "Noto Sans KR"; s.fontDefault2 = true; }
   if(!Array.isArray(s.defaultTimes)) s.defaultTimes = emptyState().defaultTimes;
-  s.rooms.forEach(r => { if(!Array.isArray(r.grades) || r.grades.length < 2) r.grades = ["1","3"]; r.grades = r.grades.slice(0,2).map(g => ["1","2","3"].includes(String(g)) ? String(g) : "1"); if(r.print === undefined) r.print = true; });
+  s.rooms.forEach(r => { if(!Array.isArray(r.grades) || !r.grades.length) r.grades = ["1","3"]; if(r.grades.length < 2) r.grades = [r.grades[0], ""]; r.grades = r.grades.slice(0,2).map((g,i) => ["1","2","3"].includes(String(g)) ? String(g) : (i === 1 ? "" : "1")); if(r.print === undefined) r.print = true; });
   // 같은 식별자가 두 번 쓰이면(파일 직접 수정·병합 등) 뒤의 것에 새 식별자를 붙여 서로 섞이지 않게 함
   const seenId = new Set(), fresh = o => { if(!o.id || seenId.has(o.id)) o.id = uid(); seenId.add(o.id); };
   ["1","2","3"].forEach(g => s.subjects[g].forEach(fresh)); s.days.forEach(d => { fresh(d); d.periods.forEach(fresh); }); s.rooms.forEach(fresh);
@@ -801,13 +824,12 @@ function helpView(){
       <li><div><b>시험실 정보</b><span>시험실 이름, 응시 학년·반·번호와 결번을 넣어요.</span></div></li>
       <li><div><b>좌석 배치</b><span>자동으로 앉혀져요. 바꿀 자리만 눌러서 고치세요.</span></div></li>
       <li><div><b>출력</b><span>미리보기를 확인하고 PDF로 저장해요.</span></div></li></ol>
-      <div><button class="btn primary" data-view="seat">시험실 세팅 시작</button></div></div>
+      <div><button class="btn primary" data-act="tutorial" data-t="seat">시험실 세팅 튜토리얼 시작</button></div></div>
     <div class="panel setcard"><h2 class="sec">시간표 만들기</h2><ol class="steps">
       <li><div><b>과목 설정</b><span>학교 과목코드표를 불러오고, 교실별로 붙일 학년을 정해요.</span></div></li>
       <li><div><b>시간표 입력</b><span>시험 기간을 정하면 평일이 자동으로 채워져요. 교시마다 과목을 고르세요.</span></div></li>
       <li><div><b>출력</b><span>교실별 시간표를 미리보고 PDF로 저장해요.</span></div></li></ol>
-      <div><button class="btn primary" data-view="tt">시간표 만들기 시작</button></div></div>
-    <div class="panel setcard"><h2 class="sec">전체 진행 상황</h2>${flowHTML()}</div></div>`;
+      <div><button class="btn primary" data-act="tutorial" data-t="tt">시간표 만들기 튜토리얼 시작</button></div></div></div>`;
 }
 function faqView(){
   const Q = (q, a) => `<details class="faq"><summary>${q}</summary><p>${a}</p></details>`;
@@ -841,6 +863,122 @@ document.addEventListener("click", e => {
   const b = e.target.closest("[data-view]"); if(!b || !shellEl.contains(b)) return;
   e.preventDefault(); e.stopPropagation(); setView(b.dataset.view);
 }, true);
+
+/* ---------- 모달 · 초기화 · 튜토리얼 ---------- */
+const modalEl = document.createElement("div");
+modalEl.className = "modal"; modalEl.hidden = true;
+document.body.appendChild(modalEl);
+function openModal(html){ modalEl.innerHTML = `<div class="modalbox" role="alertdialog" aria-modal="true">${html}</div>`; modalEl.hidden = false; const f = modalEl.querySelector("[data-m=cancel]"); if(f) f.focus(); }
+function closeModal(){ modalEl.hidden = true; modalEl.innerHTML = ""; }
+document.getElementById("resetBtn").addEventListener("click", () => {
+  openModal(`<h3>저장된 데이터를 모두 지울까요?</h3>
+    <p class="hint">시간표 · 과목 · 교실 구성 · 자리 배치 · 보관한 시험 · 내 코드표 · 화면 설정이 이 브라우저에서 지워지고 처음 상태가 돼요.${db ? " 공유 저장소의 데이터도 함께 지워져요." : ""} <b>지운 뒤에는 되돌릴 수 없어요.</b></p>
+    <div class="row" style="justify-content:flex-end"><button class="btn" data-m="backup">먼저 백업 저장</button><button class="btn" data-m="cancel">취소</button><button class="btn armed" data-m="reset">모두 지우기</button></div>`);
+});
+modalEl.addEventListener("click", async e => {
+  if(e.target === modalEl) return closeModal();
+  const b = e.target.closest("[data-m]"); if(!b) return;
+  if(b.dataset.m === "cancel") return closeModal();
+  if(b.dataset.m === "backup"){ try { await doExport(); } catch(err){} return; }
+  if(b.dataset.m === "reset"){ closeModal(); resetAll(); }
+});
+function resetAll(){
+  try { Object.keys(localStorage).filter(k => k.indexOf("exam-") === 0).forEach(k => localStorage.removeItem(k)); } catch(e){}
+  undoStack.length = 0;
+  state = normalize(emptyState()); seat = null;
+  tab = "subjects"; seatTab = "room"; app = "tt"; view = "home";
+  selSeat = null; selStu = null; armed = null; savedFilter = "all";
+  ttConfirm = null; genPreview = null; showArchive = false; bookPick = null; bookConfirm = null; bookEdit = null; codeMsg = "";
+  pendingImport = null; try { showImportBox(); } catch(e){}
+  guideClosed = true; theme = "auto"; applyTheme("auto");
+  try { ensureSeat(); } catch(e){}
+  commit(false); render(); window.scrollTo({top:0});
+  flash("저장된 데이터를 모두 지웠어요. 처음 상태로 돌아왔어요.");
+}
+document.addEventListener("keydown", e => { if(e.key === "Escape"){ if(!modalEl.hidden) closeModal(); else if(tut) endTutorial(); } });
+
+// 튜토리얼: 실제 화면의 칸을 하나씩 짚어 주는 안내 (데이터는 건드리지 않아요)
+const TUTORIALS = {
+  seat: {title:"시험실 세팅", app:"seat", steps:[
+    {tab:"room", sel:"#seatTitle", t:"시험명", x:"자리 배치도 위에 찍힐 제목이에요. 비워 두면 ‘시험 자리 배치도’로 찍혀요."},
+    {tab:"room", sel:".grp", t:"응시 학생", x:"학년·반·번호 범위와 결번을 넣으면 응시 인원이 자동으로 계산돼요."},
+    {tab:"room", sel:"#structBox", t:"교실 구조", x:"좌석 열·행 수와 출입문 위치를 실제 교실에 맞춰요. 저장해 두면 다음 시험에도 불러 쓸 수 있어요."},
+    {tab:"place", sel:".sstats", t:"배치 결과 요약", x:"학생은 자동으로 앉혀져요. 미배정·중복 배정이 0명인지만 확인하세요."},
+    {tab:"place", sel:".classroom-wrap", t:"좌석 고치기", x:"바꿀 자리만 눌러서 서로 바꿔요. 직접 고친 자리는 그대로 유지돼요."},
+    {tab:"print", sel:"[data-sact=spdfAll]", t:"PDF 저장", x:"미리보기를 확인하고 PDF로 저장하면 끝이에요."}]},
+  tt: {title:"시간표 만들기", app:"tt", steps:[
+    {tab:"subjects", sel:".starts, .codebook", t:"시작하기", x:"‘새 시험 준비하기’를 누르면 학교 과목코드표가 들어와요. 이미 시작했다면 이 칸에서 코드표를 관리해요."},
+    {tab:"subjects", sel:".roomrow", t:"교실 구성", x:"교실마다 함께 시험 보는 학년을 정해요. 한 학년만 응시하면 오른쪽 학년을 ‘없음’으로 두세요."},
+    {tab:"subjects", sel:".codebook", t:"과목코드표", x:"학기 코드표를 고르거나 ‘내 코드표 만들기’로 직접 등록할 수 있어요."},
+    {tab:"schedule", sel:"#rangeStart", t:"시험 기간", x:"시작일과 종료일을 넣고 ‘평일 자동 생성’을 누르면 날짜가 채워져요."},
+    {tab:"schedule", sel:"table.grid", t:"교시별 과목", x:"교시마다 학년별 과목을 골라요. 과목 옆 ＋로 선택과목을 더 넣을 수 있어요."},
+    {tab:"output", sel:"[data-act=pdfSel]", t:"PDF 저장", x:"교실별 미리보기를 확인하고 PDF로 저장해요."}]}
+};
+let tut = null;
+const tutEl = document.createElement("div");
+tutEl.className = "tut"; tutEl.hidden = true;
+tutEl.innerHTML = `<div class="tutblock"></div><div class="tuthl"></div><div class="tutpop" role="dialog" aria-label="튜토리얼"></div>`;
+document.body.appendChild(tutEl);
+function startTutorial(k){
+  const T = TUTORIALS[k]; if(!T) return;
+  tut = {k, T, i:0}; tutEl.hidden = false; tutGo(0);
+}
+function endTutorial(){ tut = null; tutEl.hidden = true; }
+function tutGo(i){
+  const st = tut.T.steps[i]; tut.i = i;
+  const same = view === tut.T.app && (tut.T.app === "tt" ? tab === st.tab : seatTab === st.tab);
+  if(!same){
+    view = tut.T.app; app = view;
+    if(app === "tt"){ tab = st.tab; try { localStorage.setItem(LS_TAB, tab); } catch(e){} }
+    else { seatTab = st.tab; try { localStorage.setItem(LS_STAB, seatTab); } catch(e){} }
+    try { localStorage.setItem(LS_VIEW, view); localStorage.setItem(LS_APP, app); } catch(e){}
+    render();
+  }
+  requestAnimationFrame(() => requestAnimationFrame(() => tutPlace(true)));
+}
+function tutPlace(scroll){
+  if(!tut) return;
+  const st = tut.T.steps[tut.i], n = tut.T.steps.length;
+  const el = [...document.querySelectorAll(st.sel)].find(x => x.offsetParent !== null || x.getClientRects().length) || null;
+  if(el && scroll) el.scrollIntoView({block:"center"});
+  const hl = tutEl.querySelector(".tuthl"), pop = tutEl.querySelector(".tutpop");
+  const last = tut.i === n - 1;
+  pop.innerHTML = `<div class="tutcount">${tut.T.title} · ${tut.i + 1} / ${n}</div><b>${st.t}</b><p>${st.x}</p>${el ? "" : `<p class="hint">지금 화면에는 이 칸이 없어요. 시작하면 나타나요.</p>`}
+    <div class="row" style="justify-content:space-between"><button class="btn ghost" data-tut="end">그만 보기</button><span class="row">${tut.i ? `<button class="btn" data-tut="prev">이전</button>` : ""}<button class="btn primary" data-tut="${last ? "end" : "next"}">${last ? "완료" : "다음"}</button></span></div>`;
+  const vw = window.innerWidth, vh = window.innerHeight, pw = Math.min(340, vw - 24);
+  pop.style.width = pw + "px";
+  if(!el){ hl.style.cssText = `left:${vw/2}px;top:${vh/2}px;width:0;height:0`; pop.style.left = (vw - pw)/2 + "px"; pop.style.top = Math.max(12, vh/2 - 110) + "px"; return; }
+  const r = el.getBoundingClientRect(), pad = 6;
+  const top = Math.max(4, r.top - pad), left = Math.max(4, r.left - pad), w = Math.min(vw - 8, r.width + pad*2), h = Math.min(vh - 8, r.height + pad*2);
+  hl.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px`;
+  const ph = pop.offsetHeight || 190;
+  let py = top + h + 12; if(py + ph > vh - 8) py = top - ph - 12; if(py < 8) py = Math.min(vh - ph - 8, top + 12);
+  pop.style.top = Math.max(8, py) + "px";
+  pop.style.left = Math.min(Math.max(12, left), vw - pw - 12) + "px";
+}
+tutEl.addEventListener("click", e => {
+  const b = e.target.closest("[data-tut]"); if(!b || !tut) return;
+  if(b.dataset.tut === "end") return endTutorial();
+  tutGo(tut.i + (b.dataset.tut === "next" ? 1 : -1));
+});
+let tutRaf = 0;
+const tutReflow = () => { if(!tut || tutRaf) return; tutRaf = requestAnimationFrame(() => { tutRaf = 0; tutPlace(false); }); };
+window.addEventListener("resize", tutReflow); window.addEventListener("scroll", tutReflow, {passive:true});
+
+/* ---------- 내 과목코드표 직접 등록 ---------- */
+let bookEdit = null; // {id, title, "1","2","3"}
+document.addEventListener("input", e => { const k = e.target && e.target.dataset && e.target.dataset.be; if(k && bookEdit) bookEdit[k] = e.target.value; });
+const linesOf = items => items.map(([n,c]) => c ? `${n} (${c})` : n).join("\n");
+function bookEditorBox(){
+  if(!bookEdit) return "";
+  const B = bookEdit;
+  return `<div class="confirm" id="bookEditor" style="flex-basis:100%;border-color:var(--accent)">
+    <b>${B.id ? "내 코드표 수정" : "내 코드표 만들기"}</b>
+    <label class="field"><span>코드표 이름</span><input type="text" id="beTitle" data-be="title" value="${esc(B.title)}" placeholder="예) 2027학년도 1학기 과목코드표"></label>
+    <span class="hint">학년마다 한 줄에 한 과목씩 <code>과목명 (코드)</code>로 적어요. 엑셀에서 복사해 붙여 넣어도 돼요.</span>
+    <div class="bookcols">${["1","2","3"].map(g => `<label class="field"><span>${g}학년</span><textarea id="be${g}" data-be="${g}" rows="8" placeholder="공통국어1 (01)&#10;공통수학1 (02)">${esc(B[g])}</textarea></label>`).join("")}</div>
+    <div class="row"><button class="btn" data-act="bookFill" title="지금 과목 목록을 그대로 가져와요">지금 과목 목록으로 채우기</button><span style="flex:1"></span><button class="btn primary" data-act="bookSave">저장</button><button class="btn" data-act="bookEditCancel">취소</button></div></div>`;
+}
 try { const t = localStorage.getItem(LS_STAB); if(["room","place","print"].includes(t)) seatTab = t; } catch(e){}
 
 /* ---------- 저장 (시간표 = app/state, 자리 배치 = app/seats — 서로 다른 문서) ---------- */
@@ -1259,10 +1397,11 @@ function guideBox(){
   if(!g) return "";
   const mark = {ok:"정상", no:"필요", ask:"확인"};
   const ready = g.checks.every(c => c.st === "ok");
+  const ck = app === "seat" ? g.checks.filter(c => c.st === "no") : g.checks;
   return `<details class="guide" id="stepGuide" ${guideClosed ? "" : "open"}>
     <summary><span class="gt">${g.title}</span><span class="hint">${esc(g.short)}</span>${ready && g.readyText ? `<span class="gready">✓ ${g.readyText}</span>` : ""}<span class="gfold"><span class="o">안내 접기 ▴</span><span class="c">안내 펼치기 ▾</span></span></summary>
     <div class="gbody"><p class="gdo">${g.todo}</p>
-      <div><b style="font-size:12.5px">다음 단계로 가기 전 확인</b><ul class="gck">${g.checks.map(c => `<li class="${c.st}"><span class="m">${mark[c.st]}</span><span>${esc(c.t)}</span></li>`).join("")}</ul></div>
+      ${ck.length ? `<div><b style="font-size:12.5px">다음 단계로 가기 전 확인</b><ul class="gck">${ck.map(c => `<li class="${c.st}"><span class="m">${mark[c.st]}</span><span>${esc(c.t)}</span></li>`).join("")}</ul></div>` : ""}
       <div class="gnext">${g.next ? `<span>다음 단계: ${esc(g.next.what)}</span>${app === "tt" ? `<button class="btn" data-goto="${g.next.tab}">${esc(g.next.label)} →</button>` : `<button class="btn" data-sgoto="${g.next.tab}">${esc(g.next.label)} →</button>`}` : `<span>${esc(g.last || "")}</span>`}</div></div></details>`;
 }
 function guideData(){
@@ -1390,17 +1529,19 @@ function trialBar(){
 function codeBookPanel(){
   const st = codeBookStatus();
   const done = !st.wrong && !st.missing;
-  const cur = curBookId(), pick = bookPick && CODE_BOOKS[bookPick] ? bookPick : cur;
+  const cur = curBookId(), pick = bookPick && allBooks()[bookPick] ? bookPick : cur;
   return `<div class="panel codebook">
     <b>📋 ${bookOf(cur).title}</b>
     <span class="hint">${st.total}과목 중 ${st.have}과목 일치${st.wrong ? ` · 코드 다름 ${st.wrong}` : ""}${st.missing ? ` · 목록에 없음 ${st.missing}` : ""}</span>
     ${done ? `<span class="okmark">✓ 모두 반영됨</span>` : `${st.wrong ? `<button class="btn" data-act="applyCodes" data-add="0">코드 맞추기 (${st.wrong})</button>` : ""}${st.missing ? `<button class="btn" data-act="applyCodes" data-add="1">빠진 과목 추가 (${st.missing})</button>` : ""}`}
     ${codeMsg ? `<span class="hint" style="flex-basis:100%">${esc(codeMsg)}</span>` : ""}
     <div class="row" style="flex-basis:100%"><span class="lbl2" style="min-width:0">학기 코드표</span>
-      <select id="bookPick" data-bookpick aria-label="학기 코드표 고르기">${Object.keys(CODE_BOOKS).map(id => `<option value="${id}" ${id===pick?"selected":""}>${esc(CODE_BOOKS[id].title)}${id===cur?" (지금 사용 중)":""}</option>`).join("")}</select>
+      <select id="bookPick" data-bookpick aria-label="학기 코드표 고르기">${Object.keys(allBooks()).map(id => `<option value="${id}" ${id===pick?"selected":""}>${esc(allBooks()[id].title)}${CODE_BOOKS[id] ? "" : " (내 코드표)"}${id===cur?" (지금 사용 중)":""}</option>`).join("")}</select>
       <button class="btn" data-act="bookSwitch" ${pick===cur?"disabled title=\"지금 사용 중인 코드표예요. 다른 학기를 고르세요\"":""}>이 코드표로 바꾸기…</button></div>
+    <div class="row" style="flex-basis:100%"><button class="btn" data-act="bookNew">+ 내 코드표 만들기</button>${pick && state.customBooks[pick] ? `<button class="btn" data-act="bookEditOpen">이 코드표 수정</button><button class="btn ghost danger" data-act="bookDel">이 코드표 삭제</button>` : ""}</div>
+    ${bookEditorBox()}
     ${bookConfirmBox()}
-    <span class="hint" style="flex-basis:100%">학기가 바뀌면 위에서 학기 코드표를 골라 바꾸세요. 목록에 없는 학기의 코드는 각 학년의 ‘여러 과목 한꺼번에 붙여넣기’에 <code>과목명 (코드)</code>로 붙여 넣으면 같은 이름의 코드가 새 값으로 바뀌어요.</span>
+    <span class="hint" style="flex-basis:100%">학기가 바뀌면 코드표를 골라 바꾸세요. 목록에 없는 코드는 ‘내 코드표 만들기’나 학년별 붙여넣기로 넣어요.</span>
   </div>`;
 }
 
@@ -1410,12 +1551,12 @@ function roomsPanel(){
       <input type="text" id="rl-${r.id}" value="${esc(r.label)}" data-rlabel="${r.id}" aria-label="교실 이름" placeholder="교실 이름">
       <select id="rg0-${r.id}" data-rg="${r.id}" data-i="0" aria-label="왼쪽 열 학년">${gOpt(r.grades[0])}</select>
       <span class="plus">+</span>
-      <select id="rg1-${r.id}" data-rg="${r.id}" data-i="1" aria-label="오른쪽 열 학년">${gOpt(r.grades[1])}</select>
+      <select id="rg1-${r.id}" data-rg="${r.id}" data-i="1" aria-label="오른쪽 열 학년"><option value="" ${r.grades[1] ? "" : "selected"}>없음 (한 학년만)</option>${gOpt(r.grades[1])}</select>
       <button class="btn ghost" data-act="delRoom" data-id="${r.id}" aria-label="교실 ${esc(r.label || "")} 삭제" title="교실 ${esc(r.label || "")} 삭제">×</button>
     </div>`).join("");
   return `<section class="panel" style="margin-bottom:14px;display:flex;flex-direction:column;gap:6px">
       <h2 class="sec">교실 구성</h2>
-      <p class="hint">교실마다 함께 시험 보는 학년을 정해요. 왼쪽 학년이 시간표 왼쪽 열이에요.</p>
+      <p class="hint">교실마다 함께 시험 보는 학년을 정해요. 한 학년만 응시하면 오른쪽을 ‘없음’으로 두세요. 시간표가 한 열로 합쳐져요.</p>
       <div>${rows}</div>
       <div class="row"><button class="btn" data-act="addRoom">+ 교실 추가</button></div>
     </section>`;
@@ -1451,8 +1592,10 @@ function subjectsView(){
 }
 
 // 교실 구성에 쓰이는 학년만 입력 표에 보여 줌
+const roomGr = r => r.grades.filter(Boolean);
 function activeGrades(){
-  const set = new Set(); state.rooms.forEach(r => r.grades.forEach(g => set.add(g)));
+  const set = new Set(); state.rooms.forEach(r => r.grades.forEach(g => { if(g) set.add(g); }));
+  
   const a = ["1","2","3"].filter(g => set.has(g));
   return a.length ? a : ["1","2","3"];
 }
@@ -1511,7 +1654,7 @@ function ttConfirmBox(){
         <li>날짜를 어떻게 할까요?
           <label class="check" style="margin-top:4px"><input type="radio" name="copyDates" value="keep" ${ttConfirm.dates !== "clear" ? "checked" : ""} data-copydates> 날짜도 그대로 복사 (나중에 고치기)</label>
           <label class="check"><input type="radio" name="copyDates" value="clear" ${ttConfirm.dates === "clear" ? "checked" : ""} data-copydates> 날짜는 비우고 교시·과목만 가져오기</label></li>
-        ${a.codeBook && CODE_BOOKS[a.codeBook] && a.codeBook !== curBookId() ? `<li>이 시험은 ${esc(bookOf(a.codeBook).title)}로 만든 시험이에요. 과목코드를 어떻게 할까요?
+        ${a.codeBook && allBooks()[a.codeBook] && a.codeBook !== curBookId() ? `<li>이 시험은 ${esc(bookOf(a.codeBook).title)}로 만든 시험이에요. 과목코드를 어떻게 할까요?
           <label class="check" style="margin-top:4px"><input type="radio" name="copyCodes" value="now" ${ttConfirm.codes !== "then" ? "checked" : ""} data-copycodes> 지금 코드표(${esc(bookOf(curBookId()).title)}) 그대로 — 새 시험을 만들 때</label>
           <label class="check"><input type="radio" name="copyCodes" value="then" ${ttConfirm.codes === "then" ? "checked" : ""} data-copycodes> 그때 코드표로 되돌리기 — 그 시험을 그대로 다시 출력할 때 (과목 설정의 코드표도 함께 바뀌어요)</label></li>` : ""}
       </ul>
@@ -1708,8 +1851,8 @@ function ttCheck(){
     if(miss.length) W(`${g}학년 시간표에 아직 넣지 않은 과목 ${miss.length}개: ${miss.slice(0,8).map(s => s.name).join(", ")}${miss.length > 8 ? " …" : ""} (시험이 없는 과목이면 그대로 두세요)`, {tab:"schedule"});
   });
   state.rooms.forEach(r => {
-    if(r.grades[0] === r.grades[1]) W(`교실 ‘${r.label || "교실"}’의 두 열이 모두 ${r.grades[0]}학년이에요. 과목 설정의 교실 구성에서 한쪽 학년을 바꿔 주세요.`, {tab:"subjects", id:"rg1-"+r.id});
-    if(state.days.length && !buildSheets(r).length) W(`‘${r.label || "교실"}’(${r.grades.join("·")}학년)은 출력할 시간표가 없어요.`, {tab:"output"});
+    if(r.grades[1] && r.grades[0] === r.grades[1]) W(`교실 ‘${r.label || "교실"}’의 두 열이 모두 ${r.grades[0]}학년이에요. 과목 설정의 교실 구성에서 한쪽 학년을 바꿔 주세요.`, {tab:"subjects", id:"rg1-"+r.id});
+    if(state.days.length && !buildSheets(r).length) W(`‘${r.label || "교실"}’(${roomGr(r).join("·")}학년)은 출력할 시간표가 없어요.`, {tab:"output"});
   });
   return items;
 }
@@ -1748,13 +1891,13 @@ function outputView(){
   const sel = sheetsPer.filter(x => x.r.print !== false);
   const selTotal = sel.reduce((a,x) => a + x.sheets.length, 0);
   const pv = sel.map(({r, sheets}) => `<section class="panel">
-      <div class="pv-head"><h3>${esc(r.label || "교실")}</h3><span class="meta">${r.grades[0]}학년 + ${r.grades[1]}학년 · ${sheets.length}장</span>
+      <div class="pv-head"><h3>${esc(r.label || "교실")}</h3><span class="meta">${roomGr(r).map(g => g + "학년").join(" + ")} · ${sheets.length}장</span>
         <span class="spacer"></span>
         <button class="btn" data-act="pdfRoom" data-id="${r.id}" ${sheets.length?"":"disabled"}>이 교실 PDF 저장</button></div>
       ${sheets.length ? `<div class="pages">${sheets.map((s,i) => `<div class="page"><canvas data-room="${r.id}" data-i="${i}" aria-label="${esc(s.dateLabel)} 시간표"></canvas><div class="cap">${i+1}쪽 · ${esc(s.dateLabel)}</div></div>`).join("")}</div>`
         : `<p class="hint">이 두 학년이 시험 보는 교시가 아직 없어요.</p>`}
     </section>`).join("");
-  const targets = sheetsPer.map(({r, sheets}) => `<label class="target"><input type="checkbox" id="pr-${r.id}" data-print="${r.id}" ${r.print!==false?"checked":""}> ${esc(r.label || "교실")} <small>${r.grades[0]}+${r.grades[1]}학년 · ${sheets.length}장</small></label>`).join("");
+  const targets = sheetsPer.map(({r, sheets}) => `<label class="target"><input type="checkbox" id="pr-${r.id}" data-print="${r.id}" ${r.print!==false?"checked":""}> ${esc(r.label || "교실")} <small>${roomGr(r).join("+")}학년 · ${sheets.length}장</small></label>`).join("");
   return `<div class="out-grid">
     <aside class="side">
       <div class="panel" style="display:flex;flex-direction:column;gap:12px">
@@ -1804,14 +1947,14 @@ function buildSheets(room){
   sortedDays().forEach(d => {
     const rows = [];
     d.periods.forEach((p,i) => {
-      const cells = room.grades.map(g => (p.g[g]||[]).map(id => {
+      const cells = roomGr(room).map(g => (p.g[g]||[]).map(id => {
         if(id === SELF) return {self:true};
         const s = subjById(g, id); return s ? {name:s.name, code:s.code} : null;
       }).filter(Boolean));
       if(state.hideEmpty && cells.every(c => !c.length)) return;
       rows.push({no:i+1, time:p.time, cells});
     });
-    if(rows.length) out.push({dateLabel: dateLabel(d.date), grades: room.grades, rows, title, roomLabel: state.showRoom ? (room.label || "") : ""});
+    if(rows.length) out.push({dateLabel: dateLabel(d.date), grades: roomGr(room), rows, title, roomLabel: state.showRoom ? (room.label || "") : ""});
   });
   return out;
 }
@@ -1825,7 +1968,7 @@ function drawSheet(ctx, W, H, sh, fam){
   const hasTitle = !!(sh.title && sh.title.trim());
   const x0 = W*0.031, x1 = W*0.975, y0 = H*(hasTitle ? 0.125 : 0.083), y1 = H*0.925;
   const tw = x1-x0, th = y1-y0;
-  const fr = [0.073,0.447,0.24,0.24], fs = fr.reduce((a,b)=>a+b,0);
+  const fr = sh.grades.length === 1 ? [0.073,0.447,0.48] : [0.073,0.447,0.24,0.24], fs = fr.reduce((a,b)=>a+b,0);
   const xs = [x0]; fr.forEach(f => xs.push(xs[xs.length-1] + tw*f/fs));
   const n = sh.rows.length;
   const hh = th/(n*1.9+1), rh = (th-hh)/n;
@@ -1937,7 +2080,7 @@ async function savePdf(rooms, filename){
     try {
       let page = 1;
       groups.forEach(({r, sheets: ss}) => {
-        const parent = doc.outline.add(null, `${r.label || "교실"} (${r.grades[0]}·${r.grades[1]}학년)`, {pageNumber: page});
+        const parent = doc.outline.add(null, `${r.label || "교실"} (${roomGr(r).join("·")}학년)`, {pageNumber: page});
         ss.forEach((sh, i) => doc.outline.add(parent, sh.dateLabel, {pageNumber: page + i}));
         page += ss.length;
       });
@@ -2908,6 +3051,30 @@ main.addEventListener("click", e => {
   const a = b.dataset.act, g = b.dataset.g;
   if(a === "savedFilter"){ savedFilter = b.dataset.f; return render(); }
   if(a === "savedOpen") return setView(b.dataset.to);
+  if(a === "tutorial") return startTutorial(b.dataset.t);
+  if(a === "bookNew"){ bookEdit = {id:"", title:"", "1":"", "2":"", "3":""}; render(); const c = document.getElementById("bookEditor"); if(c) c.scrollIntoView({block:"nearest"}); return; }
+  if(a === "bookEditOpen"){ const B = bookPick && state.customBooks[bookPick]; if(!B) return; bookEdit = {id:bookPick, title:B.title, "1":linesOf(B.data["1"]), "2":linesOf(B.data["2"]), "3":linesOf(B.data["3"])}; render(); const c = document.getElementById("bookEditor"); if(c) c.scrollIntoView({block:"nearest"}); return; }
+  if(a === "bookEditCancel"){ bookEdit = null; return render(); }
+  if(a === "bookFill"){ if(!bookEdit) return; ["1","2","3"].forEach(g => { bookEdit[g] = linesOf(state.subjects[g].filter(x => x.name.trim()).map(x => [x.name.trim(), x.code])); }); return render(); }
+  if(a === "bookSave"){
+    if(!bookEdit) return;
+    const data = {}; let n = 0;
+    ["1","2","3"].forEach(gr => { const seen = new Set(); data[gr] = parseLines(bookEdit[gr] || "").filter(x => { const k = normName(x.name); if(seen.has(k)) return false; seen.add(k); return true; }).map(x => [x.name, x.code]); n += data[gr].length; });
+    if(!n){ codeMsg = "과목이 하나도 없어요. 한 줄에 ‘과목명 (코드)’ 형식으로 적어 주세요."; return render(); }
+    const title = (bookEdit.title || "").trim() || "내 과목코드표";
+    pushUndo("tt", `내 코드표 ‘${title}’ 저장`);
+    const id = bookEdit.id || "custom-" + uid();
+    state.customBooks[id] = {title, data}; bookPick = id; bookEdit = null;
+    codeMsg = `‘${title}’을 저장했어요 (${n}과목). ‘이 코드표로 바꾸기…’를 눌러 적용하세요.`;
+    return commit();
+  }
+  if(a === "bookDel"){
+    const id = bookPick; if(!id || !state.customBooks[id]) return;
+    if(state.codeBook === id){ codeMsg = "지금 사용 중인 코드표는 지울 수 없어요. 다른 코드표로 바꾼 뒤 지우세요."; return render(); }
+    if(!armBtn(b, "bk" + id, "이 코드표 삭제", "한 번 더 누르면 삭제")) return;
+    pushUndo("tt", `내 코드표 ‘${state.customBooks[id].title}’ 삭제`);
+    delete state.customBooks[id]; bookPick = null; return commit();
+  }
   if(a === "savedArch"){ app = "tt"; tab = "schedule"; showArchive = true; ttConfirm = {kind:"copy", id:b.dataset.id, dates:"keep"}; try { localStorage.setItem(LS_TAB, tab); } catch(e){} setView("tt"); const c = document.getElementById("ttConfirm"); if(c) c.scrollIntoView({block:"center"}); return; }
   if(a === "savedTpl"){ structOpen = true; seatTab = "room"; try { localStorage.setItem(LS_STAB, "room"); } catch(e){} setView("seat"); const sel = document.getElementById("tplSel"); if(sel){ sel.value = b.dataset.id; sel.scrollIntoView({block:"center"}); sel.focus({preventScroll:true}); } return; }
   if(a === "goFix") return goFix(b);
@@ -3012,7 +3179,7 @@ main.addEventListener("click", e => {
       if(old){ state.subjects[g].push({id: old.id, name: old.name, code: old.code}); restored++; }
     }))));
     let switched = "";
-    if(ttConfirm.codes === "then" && src.codeBook && CODE_BOOKS[src.codeBook] && src.codeBook !== curBookId()){ applyBookSwitch(src.codeBook); switched = ` 과목코드는 ${bookOf(src.codeBook).title}로 되돌렸어요.`; }
+    if(ttConfirm.codes === "then" && src.codeBook && allBooks()[src.codeBook] && src.codeBook !== curBookId()){ applyBookSwitch(src.codeBook); switched = ` 과목코드는 ${bookOf(src.codeBook).title}로 되돌렸어요.`; }
     ttConfirm = null; showArchive = false; genPreview = null; bookPick = null;
     genMsg = (clear ? "보관한 시험을 복사했어요. 날짜를 이번 시험에 맞게 넣어 주세요." : "보관한 시험을 복사했어요. 날짜·과목을 이번 시험에 맞게 고치세요. 원본은 보관 목록에 그대로 있어요.") + (restored ? ` 지금 목록에 없던 과목 ${restored}개는 그때 이름·코드로 다시 넣었어요.` : "") + switched;
     return commit();
@@ -3065,7 +3232,7 @@ main.addEventListener("click", e => {
   if(a === "pdfRoom" || a === "pdfAll" || a === "pdfSel"){
     const ne = ttCheck().filter(x => x.lv === "err").length;
     if(ne){ const ok = armBtn(b, "pdf"+a+(b.dataset.id||""), b.textContent, `오류 ${ne}건 — 그래도 저장하려면 한 번 더`, 6000); pdfBlockNote("pdfMsg", ok ? 0 : ne, ttCheck().filter(x => x.lv === "err")[0]); if(!ok) return; }
-    if(a === "pdfRoom"){ const r = state.rooms.find(x => x.id === b.dataset.id); savePdf([r], pdfName(`${r.label||"교실"}(${r.grades[0]}·${r.grades[1]}학년)`)); return; }
+    if(a === "pdfRoom"){ const r = state.rooms.find(x => x.id === b.dataset.id); savePdf([r], pdfName(`${r.label||"교실"}(${roomGr(r).join("·")}학년)`)); return; }
     if(a === "pdfAll"){ savePdf(state.rooms, pdfName("전체")); return; }
     const rs = state.rooms.filter(r => r.print !== false); savePdf(rs, pdfName(rs.length === state.rooms.length ? "전체" : rs.map(r => r.label || "교실").join("+"))); return;
   }

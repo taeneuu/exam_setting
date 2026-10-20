@@ -3,28 +3,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Gothic+A1:wght@900&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Nanum+Gothic:wght@800&family=Noto+Sans+KR:wght@900&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<title>시험실 세팅 도우미</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 /* 시험실 세팅 도우미 (구 시험 준비 도우미·시험 시간표 메이커) — 저장 키·데이터 구조는 예전 그대로 유지 */
 :root{
-  --bg:#eef1f3; --surface:#ffffff; --surface-2:#f6f8f9; --ink:#17202a; --muted:#5d6b78;
-  --line:#d5dce2; --accent:#1d5c8f; --accent-ink:#ffffff; --accent-soft:#e3eef7;
-  --warn:#a35a00; --warn-soft:#fff1dc; --danger:#b42318; --ok:#2e7d4f;
-  --chip:#eef3f7; --chip-ink:#17324a; --self:#f1ecfa; --self-ink:#4a3477;
-  --display:"Black Han Sans","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
-  --radius:8px;
+  --bg:#fbf7f2; --surface:#ffffff; --surface-2:#fdf7f1; --ink:#2b221c; --muted:#8b7d71; --line:#f0e5db; --accent:#f26b1d; --accent-ink:#ffffff; --accent-soft:#fff1e6; --accent-2:#ff9a52; --warn:#b45309; --warn-soft:#fff4dd; --danger:#c8371f; --ok:#2e8a57; --chip:#fff1e4; --chip-ink:#7a3a10; --self:#f2edfb; --self-ink:#4a3477; --shadow:0 1px 2px rgba(120,70,30,.05),0 6px 20px rgba(120,70,30,.06);
+  --display:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --body:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  --radius:14px;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#12171c; --surface:#1a2128; --surface-2:#202932; --ink:#e6ebef; --muted:#9aa8b4;
-  --line:#2f3a45; --accent:#6aa8dc; --accent-ink:#0d1a26; --accent-soft:#1d3346;
-  --warn:#f0b35c; --warn-soft:#3a2c17; --danger:#f2867c; --ok:#7fcf9e;
-  --chip:#243341; --chip-ink:#d4e4f2; --self:#2e2640; --self-ink:#d6c8f5; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#12171c; --surface:#1a2128; --surface-2:#202932; --ink:#e6ebef; --muted:#9aa8b4;
-  --line:#2f3a45; --accent:#6aa8dc; --accent-ink:#0d1a26; --accent-soft:#1d3346;
-  --warn:#f0b35c; --warn-soft:#3a2c17; --danger:#f2867c; --ok:#7fcf9e;
-  --chip:#243341; --chip-ink:#d4e4f2; --self:#2e2640; --self-ink:#d6c8f5; color-scheme:dark}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){ --bg:#16120f; --surface:#211b17; --surface-2:#29221d; --ink:#f4ece5; --muted:#a8998c; --line:#3a3029; --accent:#ff8a3d; --accent-ink:#1f1005; --accent-soft:#3a2517; --accent-2:#ffb27a; --warn:#f0b35c; --warn-soft:#3a2c17; --danger:#f2867c; --ok:#7fcf9e; --chip:#3a2a1e; --chip-ink:#ffd9bd; --self:#2e2640; --self-ink:#d6c8f5; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark; }}
+:root[data-theme="dark"]{ --bg:#16120f; --surface:#211b17; --surface-2:#29221d; --ink:#f4ece5; --muted:#a8998c; --line:#3a3029; --accent:#ff8a3d; --accent-ink:#1f1005; --accent-soft:#3a2517; --accent-2:#ffb27a; --warn:#f0b35c; --warn-soft:#3a2c17; --danger:#f2867c; --ok:#7fcf9e; --chip:#3a2a1e; --chip-ink:#ffd9bd; --self:#2e2640; --self-ink:#d6c8f5; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark; }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5}
 .wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:0 48px}
@@ -237,9 +228,6 @@ footer.foot .spacer{flex:1}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 
 /* 도구 선택 (시간표 / 자리 배치) — 두 도구는 데이터가 완전히 따로예요 */
-.wrap[data-app="seat"]{--accent:#2b6b55; --accent-soft:#e0efe8}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wrap[data-app="seat"]{--accent:#6cc4a1; --accent-ink:#0b1f18; --accent-soft:#1a3a2f}}
-:root[data-theme="dark"] .wrap[data-app="seat"]{--accent:#6cc4a1; --accent-ink:#0b1f18; --accent-soft:#1a3a2f}
 .apps{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 12px}
 .app{appearance:none;display:flex;align-items:center;gap:12px;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 14px;cursor:pointer;color:var(--ink);min-width:0}
 .app:hover{border-color:var(--accent)}
@@ -365,34 +353,267 @@ details.subjbox > summary h3 .chev{margin-left:auto;font-family:var(--body);colo
 details.subjbox[open] > summary h3 .chev{transform:rotate(180deg)}
 details.subjbox[open] > summary .sprev{display:none}
 details.subjbox > summary:hover h3{color:var(--accent)}
+
+/* ===== 새 화면 구성 (사이드바 · 상단바 · 홈 카드) ===== */
+body{background:var(--bg);-webkit-font-smoothing:antialiased;letter-spacing:-.01em;word-break:keep-all;overflow-wrap:anywhere}
+svg{width:20px;height:20px;flex:none}
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+.sidenav{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:22px;padding:22px 14px;background:var(--surface);border-right:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px}
+.brand .logo{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:var(--accent);color:#fff;flex:none}
+.brand b{display:block;font-size:15.5px;font-weight:800;line-height:1.2}
+.brand small{display:block;font-size:11.5px;color:var(--muted)}
+.menu{display:flex;flex-direction:column;gap:4px}
+.menu.bottom{margin-top:auto}
+.menu button{appearance:none;display:flex;align-items:center;gap:12px;border:0;background:none;padding:11px 14px;border-radius:11px;font:inherit;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer;text-align:left}
+.menu button svg{color:var(--muted)}
+.menu button:hover{background:var(--accent-soft)}
+.menu button[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+.menu button[aria-current="page"] svg{color:currentColor}
+.content{min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 28px 0;max-width:1240px;width:100%;margin:0 auto}
+.pagetitle{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:800;min-width:0}
+.pagetitle .back{appearance:none;border:0;background:none;color:var(--ink);cursor:pointer;display:grid;place-items:center;width:32px;height:32px;border-radius:9px;margin-left:-6px}
+.pagetitle .back:hover{background:var(--accent-soft)}
+.topbar .status{margin-left:auto}
+.iconbtn{appearance:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.iconbtn:hover{border-color:var(--accent);color:var(--accent)}
+.who{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.avatar{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px}
+.wrap{max-width:1240px;width:100%;padding:18px 28px 64px}
+.status{font-size:12.5px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px}
+.status .dot{border-radius:50%;background:var(--muted)}
+.status[data-s="saved"] .dot{background:var(--ok)}
+.status[data-s="saving"] .dot{background:var(--accent)}
+.status[data-s="local"] .dot{background:var(--accent)}
+.status[data-s="ro"] .dot{background:var(--warn)}
+
+/* 공통 요소 둥글고 부드럽게 */
+.panel{border-radius:var(--radius);border-color:var(--line);box-shadow:var(--shadow);padding:20px}
+.btn{border-radius:10px;padding:7px 14px;font-weight:600;min-height:38px}
+.btn.primary{background:var(--accent);border-color:var(--accent);box-shadow:0 2px 8px color-mix(in srgb,var(--accent) 30%,transparent)}
+.btn.primary:hover{filter:brightness(1.05)}
+input[type=text],input[type=date],input[type=number],select,textarea{border-radius:10px;padding:8px 11px;border-color:var(--line)}
+input[type=text]:focus,input[type=date]:focus,input[type=number]:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:0;border-color:var(--accent)}
+input[type=number]{padding:7px 4px}
+h2.sec{font-size:16.5px;font-weight:800}
+.hint{line-height:1.55}
+.seg label{border-radius:10px}
+.grp,.room{border-radius:12px}
+.rchip{padding:7px 15px}
+.page{border-radius:10px}
+.confirm,.imp,.warnline,.msg,.unassigned,.selbar,.sumbar{border-radius:12px}
+
+/* 단계 표시 */
+.navrow{border:0;margin-bottom:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:6px 10px;box-shadow:var(--shadow)}
+nav.tabs{gap:0;margin:0;border:0;counter-reset:none}
+nav.tabs button{flex:1;display:flex;align-items:center;gap:8px;padding:10px 8px;border:0;color:var(--muted);font-size:13.5px;position:relative;min-width:0}
+nav.tabs button:not(:last-child)::after{content:"";flex:1;height:2px;background:var(--line);border-radius:2px;margin-left:6px;min-width:12px}
+nav.tabs button .n{width:26px;height:26px;margin:0;flex:none;background:var(--surface);border:1.5px solid var(--line);color:var(--muted);font-weight:700}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border:0}
+nav.tabs button[aria-selected="true"] .n{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+nav.tabs button .st{margin-left:0;font-size:10.5px;border-radius:999px;padding:0 7px;white-space:nowrap}
+nav.tabs button .st-done,nav.tabs button .st-ready,nav.tabs button .st-printed{display:none}
+nav.tabs button:has(.st-done) .n,nav.tabs button:has(.st-ready) .n,nav.tabs button:has(.st-printed) .n{border-color:var(--accent);color:var(--accent)}
+nav.tabs button[aria-selected="true"]:has(.st-done) .n,nav.tabs button[aria-selected="true"]:has(.st-ready) .n{color:var(--accent-ink)}
+.navrow #undoBtn{display:flex;align-items:center;gap:4px}
+.shell[data-page="home"] .navrow,.shell[data-page="saved"] .navrow,.shell[data-page="settings"] .navrow,.shell[data-page="help"] .navrow,.shell[data-page="faq"] .navrow{display:none}
+
+/* 단계 안내: 얇은 한 줄로 */
+details.guide{border:1px solid var(--line);border-left:1px solid var(--line);border-radius:var(--radius);padding:10px 16px;background:var(--surface);box-shadow:var(--shadow)}
+details.guide > summary .gt{font-size:14px}
+details.guide .gbody{padding-top:8px;border-top:1px dashed var(--line);margin-top:10px}
+
+/* 홈 */
+.hero{position:relative;overflow:hidden;border-radius:20px;padding:34px 36px;background:linear-gradient(110deg,var(--surface) 35%,var(--accent-soft));border:1px solid var(--line);box-shadow:var(--shadow);margin-bottom:18px;min-height:170px}
+.hero h1{margin:0 0 10px;font-size:30px;line-height:1.3;font-weight:800;letter-spacing:-.03em;position:relative}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{margin:0;color:var(--muted);font-size:14.5px;position:relative}
+.hero .art{position:absolute;right:36px;top:50%;transform:translateY(-50%);width:210px;height:150px}
+.bigcards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.bigcard{appearance:none;display:flex;align-items:center;gap:20px;text-align:left;border:1px solid color-mix(in srgb,var(--accent) 18%,var(--line));border-radius:18px;padding:26px 26px;background:linear-gradient(120deg,var(--accent-soft),var(--surface));cursor:pointer;color:var(--ink);font:inherit;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s;min-width:0}
+.bigcard:hover{transform:translateY(-2px);box-shadow:0 10px 26px color-mix(in srgb,var(--accent) 18%,transparent)}
+.bigcard .ic{display:grid;place-items:center;width:72px;height:72px;border-radius:18px;background:linear-gradient(145deg,var(--accent-2),var(--accent));color:#fff;flex:none;box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 35%,transparent)}
+.bigcard .ic svg{width:38px;height:38px}
+.bigcard .tx{flex:1;min-width:0}
+.bigcard b{display:block;font-size:20px;font-weight:800;margin-bottom:4px}
+.bigcard small{display:block;color:var(--muted);font-size:13.5px}
+.bigcard .cardstat{display:inline-block;margin-top:8px;font-size:12px;font-weight:600;color:var(--accent);background:var(--surface);border:1px solid color-mix(in srgb,var(--accent) 25%,var(--line));border-radius:999px;padding:1px 10px}
+.bigcard .cardstat:empty{display:none}
+.bigcard .go{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;flex:none}
+.minicards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.minicard{appearance:none;position:relative;display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid var(--line);border-radius:16px;padding:20px;background:var(--surface);cursor:pointer;color:var(--ink);font:inherit;box-shadow:var(--shadow);min-width:0}
+.minicard:hover{border-color:var(--accent)}
+.minicard > svg{width:26px;height:26px;color:var(--accent);margin-bottom:8px}
+.minicard .ar{position:absolute;top:20px;right:18px;width:16px;height:16px;color:var(--muted)}
+.minicard b{font-size:15.5px;font-weight:800}
+.minicard small{color:var(--muted);font-size:12.5px;line-height:1.5}
+
+/* 시작 화면(시간표 비었을 때) */
+.starts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.start{appearance:none;display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid var(--line);border-radius:16px;padding:20px;background:var(--surface);cursor:pointer;color:var(--ink);font:inherit;box-shadow:var(--shadow)}
+.start:hover{border-color:var(--accent)}
+.start.main{border:2px solid var(--accent);background:linear-gradient(140deg,var(--accent-soft),var(--surface))}
+.start b{font-size:16px;font-weight:800}
+.start small{color:var(--muted);font-size:13px}
+.start .go{margin-top:8px;font-size:13px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:4px}
+.start .go svg{width:16px;height:16px}
+.starthead{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:16px 0 22px}
+.starthead .ic{display:grid;place-items:center;width:64px;height:64px;border-radius:18px;background:var(--accent-soft);color:var(--accent)}
+.starthead .ic svg{width:34px;height:34px}
+.starthead h2{margin:6px 0 0;font-size:21px;font-weight:800}
+
+/* 저장함 */
+.filters{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.filters button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 16px;font:inherit;font-weight:600;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.savelist{display:flex;flex-direction:column;padding:6px 0}
+.saveitem{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line)}
+.saveitem:last-child{border-bottom:0}
+.saveitem .ic{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;flex:none}
+.saveitem .ic.k-tt{background:#e8f0fe;color:#3867d6}
+.saveitem .ic.k-seat{background:var(--accent-soft);color:var(--accent)}
+.saveitem .ic.k-tpl{background:#e6f5ec;color:#2e8a57}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .saveitem .ic.k-tt{background:#1f2a40;color:#8fb0ff}:root:not([data-theme="light"]) .saveitem .ic.k-tpl{background:#1a3326;color:#7fcf9e}}
+:root[data-theme="dark"] .saveitem .ic.k-tt{background:#1f2a40;color:#8fb0ff}:root[data-theme="dark"] .saveitem .ic.k-tpl{background:#1a3326;color:#7fcf9e}
+.saveitem .tx{flex:1;min-width:0}
+.saveitem .tx b{display:block;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.saveitem .tx b small{font-weight:500;color:var(--muted);font-size:12px;margin-left:4px}
+.saveitem .tx > small{color:var(--muted);font-size:12.5px}
+.saveitem .badge{font-size:11px;font-weight:700;color:var(--accent);border:1px solid currentColor;border-radius:999px;padding:0 8px;margin-left:6px;vertical-align:1px}
+.emptybox{text-align:center;padding:36px 16px;color:var(--muted)}
+
+/* 설정·도움말 */
+.pageview{display:flex;flex-direction:column;gap:14px;max-width:760px}
+.setcard{display:flex;flex-direction:column;gap:10px}
+.setrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.setrow > span:first-child b{display:block;font-size:14px}
+.setrow > span:first-child small{color:var(--muted);font-size:12.5px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.steps li{display:flex;gap:12px;align-items:flex-start;counter-increment:s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px;flex:none}
+.steps li b{display:block}
+.steps li span{color:var(--muted);font-size:13px}
+details.faq{border-bottom:1px solid var(--line);padding:12px 0}
+details.faq:last-child{border-bottom:0}
+details.faq summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::after{content:"+";color:var(--accent);font-weight:800}
+details.faq[open] summary::after{content:"−"}
+details.faq p{margin:8px 0 0;color:var(--muted);font-size:13.5px}
+
+/* 알림 토스트 */
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);max-width:min(560px,calc(100vw - 32px));background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:12px;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.18);z-index:50}
+.toast:empty{display:none}
+
+/* 모바일 하단 메뉴 */
+.tabbar{display:none}
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .sidenav{display:none}
+  .topbar{padding:12px 16px 0}
+  .wrap{padding:14px 16px 96px}
+  .who{display:none}
+  .tabbar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+  .tabbar button{appearance:none;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;font-size:11px;font-weight:600;color:var(--muted);padding:4px 0;cursor:pointer}
+  .tabbar button[aria-current="page"]{color:var(--accent)}
+  .toast{bottom:84px}
+  .hero{padding:24px 22px;min-height:0}
+  .hero h1{font-size:22px}
+  .hero .art{display:none}
+  .bigcards{grid-template-columns:1fr;gap:12px}
+  .bigcard{padding:18px;gap:14px}
+  .bigcard .ic{width:52px;height:52px;border-radius:14px}
+  .bigcard .ic svg{width:28px;height:28px}
+  .bigcard b{font-size:17px}
+  .minicards{grid-template-columns:1fr 1fr;gap:10px}
+  .starts{grid-template-columns:1fr}
+  nav.tabs button{font-size:12.5px;gap:6px}
+  nav.tabs button .st{display:none}
+}
+@media (max-width:560px){
+  .topbar .status #statusText{display:none}
+  nav.tabs button:not([aria-selected="true"]) .lb{display:none}
+  .saveitem{padding:12px 14px;gap:10px}
+}
+.mbrand{display:none;align-items:center;gap:8px;font-size:15.5px}
+.mbrand .logo{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--accent);color:#fff}
+.mbrand .logo svg{width:17px;height:17px}
+@media (max-width:900px){.mbrand{display:flex}}
 </style>
 
-<div class="wrap" id="app" data-app="tt">
-  <header class="top">
-    <h1>시험실 세팅 도우미</h1>
-    <span class="sub">시험 일정부터 교실별 좌석 배치까지</span>
-    <div class="status" id="status" data-s="idle" role="status"><span class="dot"></span><span id="statusText">불러오는 중…</span><button class="btn" id="retrySave" hidden style="padding:2px 8px;font-size:12px">다시 저장</button><span class="qtip r" tabindex="0" aria-label="저장 위치 안내">?<span class="qbox" role="tooltip" id="storeTip"></span></span></div>
-    <span class="credit">제작 : 이태형T(한백고)</span>
-  </header>
-  <div class="apps" role="tablist" aria-label="도구 선택">
-    <button class="app" role="tab" data-app="tt" aria-selected="true"><span class="ic" aria-hidden="true">🗓</span><span style="min-width:0"><b>시험 시간표</b><small>과목 설정 → 시간표 입력 → 검수·PDF 저장</small><small class="cardstat" id="ttCardStat"></small></span></button>
-    <button class="app" role="tab" data-app="seat" aria-selected="false"><span class="ic" aria-hidden="true">🪑</span><span style="min-width:0"><b>시험 자리 배치도</b><small>시험실 설정 → 학생·좌석 배치 → 검수·PDF 저장</small><small class="cardstat" id="seatCardStat"></small></span></button>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></symbol>
+  <symbol id="i-seat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="5" rx="1"/><path d="M12 8v3M5 11h14M5 11v3M12 11v3M19 11v3"/><rect x="3" y="14" width="4" height="4" rx="1"/><rect x="10" y="14" width="4" height="4" rx="1"/><rect x="17" y="14" width="4" height="4" rx="1"/><path d="M4 18v3M6 18v3M11 18v3M13 18v3M18 18v3M20 18v3"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M7.5 14h.01M12 14h.01M16.5 14h.01M7.5 17.5h.01M12 17.5h.01"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+  <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V3h6v1M9 11.5l2 2 4-4"/></symbol>
+</svg>
+<div class="shell" id="shell" data-page="home">
+  <aside class="sidenav" aria-label="메뉴">
+    <div class="brand"><span class="logo"><svg><use href="#i-logo"/></svg></span><span><b>시험실 세팅 도우미</b><small>간단하게, 빠르게, 정확하게</small></span></div>
+    <nav class="menu" id="menu">
+      <button data-view="home"><svg><use href="#i-home"/></svg>홈</button>
+      <button data-view="seat"><svg><use href="#i-seat"/></svg>시험실 세팅</button>
+      <button data-view="tt"><svg><use href="#i-cal"/></svg>시간표 만들기</button>
+      <button data-view="saved"><svg><use href="#i-box"/></svg>저장함</button>
+    </nav>
+    <nav class="menu bottom"><button data-view="settings"><svg><use href="#i-gear"/></svg>설정</button></nav>
+  </aside>
+  <div class="content">
+    <header class="topbar">
+      <div class="pagetitle" id="pageTitle"></div>
+      <div class="status" id="status" data-s="idle" role="status"><span class="dot"></span><span id="statusText">불러오는 중…</span><button class="btn" id="retrySave" hidden style="padding:2px 8px;font-size:12px;min-height:0">다시 저장</button><span class="qtip r" tabindex="0" aria-label="저장 위치 안내">?<span class="qbox" role="tooltip" id="storeTip"></span></span></div>
+      <button class="iconbtn" id="themeBtn" aria-label="화면 테마 바꾸기" title="밝게 / 어둡게"><svg><use href="#i-sun"/></svg></button>
+      <span class="who"><span class="avatar" aria-hidden="true">T</span><span class="credit">이태형T</span></span>
+    </header>
+    <div class="wrap" id="app" data-app="tt">
+      <div class="navrow" id="navrow"><nav class="tabs" role="tablist" id="tabs"></nav><button class="btn ghost" id="undoBtn" hidden></button></div>
+      <div id="syncBanner" hidden style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px" aria-live="polite"></div>
+      <div id="importBox" hidden style="margin-bottom:14px"></div>
+      <main id="main"></main>
+      <section id="settingsView" class="pageview" hidden>
+        <div class="panel setcard">
+          <h2 class="sec">화면</h2>
+          <div class="setrow"><span><b>테마</b><small>밝게 · 어둡게 · 기기 설정 따르기</small></span>
+            <div class="seg sm" role="radiogroup" id="themePick">
+              <label><input type="radio" name="themePick" value="light"> 밝게</label>
+              <label><input type="radio" name="themePick" value="dark"> 어둡게</label>
+              <label><input type="radio" name="themePick" value="auto"> 자동</label></div></div>
+        </div>
+        <div class="panel setcard" id="backup">
+          <h2 class="sec">백업 · 복원</h2>
+          <div class="setrow"><span><b>백업 파일</b><small>시간표와 자리 배치를 .json 하나로 저장해요</small></span>
+            <span class="row"><button class="btn primary" id="exportJson">백업 저장</button>
+            <label class="btn" for="importJson">가져오기…</label></span>
+            <input type="file" id="importJson" accept=".json,application/json" hidden></div>
+          <p class="hint">학생 번호(학년·반·번호)가 들어 있어요. 공용 PC라면 작업 후 지워 주세요.</p>
+        </div>
+        <div class="panel setcard">
+          <h2 class="sec">저장 위치</h2>
+          <p class="hint" id="storeInfo"></p>
+        </div>
+        <p class="hint" style="text-align:center">제작 : 이태형T(한백고)</p>
+      </section>
+    </div>
   </div>
-  <div class="navrow"><nav class="tabs" role="tablist" id="tabs"></nav><button class="btn ghost" id="undoBtn" hidden></button></div>
-  <div id="syncBanner" hidden style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px" aria-live="polite"></div>
-  <main id="main"></main>
-  <footer class="foot" id="backup">
-    <span><b style="color:var(--ink)">백업 · 복원</b> (시간표 + 자리 배치)</span>
-    <button class="btn" id="exportJson" title="시간표와 자리 배치를 .json 파일 하나로 저장해요">백업 파일 저장</button>
-    <label class="btn" for="importJson">백업 파일 가져오기…</label>
-    <input type="file" id="importJson" accept=".json,application/json" hidden>
-    <span class="spacer"></span>
-    <span id="footMsg" role="status"></span>
-    <span class="hint" style="flex-basis:100%;margin:0">백업 파일에는 시험 정보와 학생 번호(학년·반·번호)가 들어 있어요. 공용 PC에 저장했다면 작업 후 지우고, 다른 사람에게 보낼 때는 받는 사람을 확인하세요.</span>
-    <div id="importBox" hidden style="flex-basis:100%"></div>
-    <details class="more-set" style="flex-basis:100%"><summary>데이터는 어디에 저장되나요?</summary><p class="hint" id="storeInfo"></p>
-      <p class="hint">백업 파일과 자리 배치도에는 학생 번호(학년·반·번호)가 들어 있어요. 이름은 저장하지 않지만, 파일을 메일·메신저로 보내기 전에 받는 사람이 맞는지 확인하세요.</p></details>
-  </footer>
+  <nav class="tabbar" id="tabbar" aria-label="메뉴">
+    <button data-view="home"><svg><use href="#i-home"/></svg>홈</button>
+    <button data-view="seat"><svg><use href="#i-seat"/></svg>시험실</button>
+    <button data-view="tt"><svg><use href="#i-cal"/></svg>시간표</button>
+    <button data-view="saved"><svg><use href="#i-box"/></svg>저장함</button>
+    <button data-view="settings"><svg><use href="#i-gear"/></svg>설정</button>
+  </nav>
+  <div class="toast" id="footMsg" role="status" aria-live="polite"></div>
 </div>
 
 <script>
@@ -505,6 +726,121 @@ let app = "tt", seatTab = "room", seat = null;
 try { const t = localStorage.getItem(LS_TAB); if(t) tab = t; } catch(e){}
 try { const raw = localStorage.getItem(LS_KEY); if(raw) state = normalize(JSON.parse(raw)); } catch(e){}
 try { const a = localStorage.getItem(LS_APP); if(a === "tt" || a === "seat") app = a; } catch(e){}
+
+/* ---------- 새 화면: 홈 · 저장함 · 사용 방법 · 자주 묻는 질문 · 설정 ---------- */
+const LS_VIEW = "exam-view", LS_THEME = "exam-theme";
+const VIEWS = ["home","tt","seat","saved","settings","help","faq"];
+let view = "home", savedFilter = "all";
+try { const v = localStorage.getItem(LS_VIEW); if(VIEWS.includes(v)) view = v; } catch(e){}
+if(view === "tt" || view === "seat") app = view;
+const shellEl = document.getElementById("shell");
+const IC = n => `<svg aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const VIEW_TITLE = {home:"", tt:"시간표 만들기", seat:"시험실 세팅", saved:"저장함", settings:"설정", help:"사용 방법", faq:"자주 묻는 질문"};
+function setView(v){
+  if(!VIEWS.includes(v)) return;
+  view = v;
+  if(v === "tt" || v === "seat"){ if(app !== v){ app = v; selSeat = null; selStu = null; armed = null; } try { localStorage.setItem(LS_APP, app); } catch(e){} }
+  try { localStorage.setItem(LS_VIEW, v); } catch(e){}
+  render(); window.scrollTo({top:0});
+}
+function paintShell(){
+  shellEl.dataset.page = view;
+  const cur = view === "help" || view === "faq" ? "home" : view;
+  document.querySelectorAll("#menu button, .menu.bottom button, #tabbar button").forEach(b => { if(b.dataset.view === cur) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  const pt = document.getElementById("pageTitle");
+  pt.innerHTML = view === "home" ? `<span class="mbrand"><span class="logo">${IC("logo")}</span>시험실 세팅 도우미</span>` : `<button class="back" data-view="home" aria-label="홈으로">${IC("back")}</button><span>${VIEW_TITLE[view]}</span>`;
+  document.getElementById("settingsView").hidden = view !== "settings";
+  document.title = view === "home" ? "시험실 세팅 도우미" : `${VIEW_TITLE[view]} · 시험실 세팅 도우미`;
+}
+function cardStats(){
+  let tt = "", se = "";
+
+  try { const sm = examSummary(state), t = ttSteps(); tt = state.days.length ? `${state.examTitle.trim() ? state.examTitle.trim() + " · " : ""}${sm.days}일 · ${sm.periods}교시${t.nErr ? ` · 오류 ${t.nErr}` : ""}` : (hasContent(state) ? "과목 준비됨" : ""); } catch(e){}
+  try { if(seat && !seat.example){ const n = seat.rooms.reduce((a,r) => a + roomInfo(r).total, 0), s2 = seatSteps(); se = `${seat.rooms.length}실 · ${n}명${s2.nErr ? ` · 오류 ${s2.nErr}` : ""}`; } } catch(e){}
+  return {tt, se};
+}
+const HERO_ART = `<svg class="art" viewBox="0 0 210 150" aria-hidden="true">
+  <ellipse cx="105" cy="128" rx="92" ry="14" fill="var(--accent)" opacity=".10"/>
+  <g transform="rotate(-12 95 75)"><rect x="40" y="18" width="104" height="108" rx="10" fill="var(--surface)" stroke="var(--line)" stroke-width="2"/>
+  <rect x="40" y="18" width="104" height="18" rx="9" fill="var(--accent)" opacity=".85"/>
+  ${[0,1,2,3].map(r => [0,1,2,3].map(c => `<rect x="${54 + c*21}" y="${48 + r*17}" width="14" height="9" rx="3" fill="var(--accent)" opacity="${(r*4+c)%5===2 ? .9 : .28}"/>`).join("")).join("")}</g>
+  <circle cx="170" cy="40" r="24" fill="var(--surface)" stroke="var(--accent)" stroke-width="5"/><path d="M170 28v12l8 5" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" fill="none"/><rect x="164" y="9" width="12" height="7" rx="2" fill="var(--accent)"/>
+  <path d="M20 40l5-9 5 9-5 9z" fill="var(--accent-2)"/><path d="M128 120l42-42 8 8-42 42-11 3z" fill="var(--accent)"/><path d="M170 78l8 8 4-4-8-8z" fill="var(--accent-2)"/></svg>`;
+function homeView(){
+  const st = cardStats();
+  return `<section class="hero"><h1>안녕하세요!<br><em>시험 준비,</em> 이제 더 간단하게 해보세요.</h1><p>원하는 기능을 선택해 바로 시작할 수 있어요.</p>${HERO_ART}</section>
+  <div class="bigcards">
+    <button class="bigcard" data-view="seat"><span class="ic">${IC("seat")}</span><span class="tx"><b>시험실 세팅</b><small>시험실 좌석 배치도를 빠르게 만들 수 있어요.</small><span class="cardstat">${esc(st.se)}</span></span><span class="go">${IC("arrow")}</span></button>
+    <button class="bigcard" data-view="tt"><span class="ic">${IC("cal")}</span><span class="tx"><b>시간표 만들기</b><small>교실별 시험 시간표를 간단히 만들 수 있어요.</small><span class="cardstat">${esc(st.tt)}</span></span><span class="go">${IC("arrow")}</span></button>
+  </div>
+  <div class="minicards">
+    <button class="minicard" data-view="saved">${IC("doc")}<svg class="ar" aria-hidden="true"><use href="#i-arrow"/></svg><b>저장한 자료</b><small>만들어 둔 시간표와 배치도를 바로 불러와요.</small></button>
+    <button class="minicard" data-view="help">${IC("list")}<svg class="ar" aria-hidden="true"><use href="#i-arrow"/></svg><b>사용 방법</b><small>처음이신가요? 순서만 확인해 보세요.</small></button>
+    <button class="minicard" data-view="faq">${IC("help")}<svg class="ar" aria-hidden="true"><use href="#i-arrow"/></svg><b>자주 묻는 질문</b><small>저장·인쇄·백업에 대한 답을 모았어요.</small></button>
+    <button class="minicard" data-view="settings">${IC("gear")}<svg class="ar" aria-hidden="true"><use href="#i-arrow"/></svg><b>설정</b><small>테마, 백업·복원을 설정해요.</small></button>
+  </div>`;
+}
+function savedView(){
+
+  const f = savedFilter, items = [];
+  const sm = examSummary(state);
+  if(f !== "tpl" && f !== "seat" && state.days.length) items.push(`<div class="saveitem"><span class="ic k-tt">${IC("cal")}</span><span class="tx"><b>${esc(state.examTitle.trim() || "이번 시험")}<small>(시간표)</small><span class="badge">${state.example ? "체험용" : "작업 중"}</span></b><small>${esc(sm.range)} · ${sm.days}일 · ${sm.periods}교시</small></span><button class="btn" data-act="savedOpen" data-to="tt">열기</button></div>`);
+  if(f !== "tpl" && f !== "tt" && seat){ const n = seat.rooms.reduce((a,r) => { try { return a + roomInfo(r).total; } catch(e){ return a; } }, 0);
+    items.push(`<div class="saveitem"><span class="ic k-seat">${IC("seat")}</span><span class="tx"><b>${esc((seat.examTitle || "").trim() || "이번 시험")}<small>(시험실 세팅)</small><span class="badge">${seat.example ? "체험용" : "작업 중"}</span></b><small>${seat.rooms.length}실 · ${n}명</small></span><button class="btn" data-act="savedOpen" data-to="seat">열기</button></div>`); }
+  if(f !== "tpl" && f !== "seat") state.archive.forEach(a => { const s = examSummary(a);
+    items.push(`<div class="saveitem"><span class="ic k-tt">${IC("cal")}</span><span class="tx"><b>${esc(a.examTitle || "(시험명 없음)")}<small>(시간표)</small></b><small>${esc(fmtSaved(a.savedAt).replace(" 보관",""))} · ${s.days}일 · ${s.periods}교시</small></span><button class="btn" data-act="savedArch" data-id="${a.id}">불러오기</button><button class="btn ghost danger" data-act="delArch" data-id="${a.id}" title="보관 삭제">삭제</button></div>`); });
+  if((f === "all" || f === "tpl") && seat) seat.templates.forEach(t => items.push(`<div class="saveitem"><span class="ic k-tpl">${IC("seat")}</span><span class="tx"><b>${esc(t.name)}<small>(교실 구조)</small></b><small>${t.cols}열 × ${t.rows}행</small></span><button class="btn" data-act="savedTpl" data-id="${t.id}">불러오기</button></div>`));
+  const fb = (k, l) => `<button data-act="savedFilter" data-f="${k}" aria-pressed="${f===k}">${l}</button>`;
+  return `<div class="filters">${fb("all","전체")}${fb("seat","시험실 세팅")}${fb("tt","시간표")}${fb("tpl","교실 구조")}</div>
+    <div class="panel" style="padding:0"><div class="savelist">${items.join("") || `<div class="emptybox">아직 저장한 자료가 없어요.</div>`}</div></div>
+    <p class="hint" style="margin-top:12px">새 시험을 시작하면 지난 시간표가 자동으로 여기 보관돼요 (최근 30개). 다른 컴퓨터로 옮기려면 <button class="linkbtn" data-view="settings">설정 › 백업</button>을 쓰세요.</p>`;
+}
+function helpView(){
+  return `<div class="pageview">
+    <div class="panel setcard"><h2 class="sec">시험실 세팅 (자리 배치도)</h2><ol class="steps">
+      <li><div><b>시험실 정보</b><span>시험실 이름, 응시 학년·반·번호와 결번을 넣어요.</span></div></li>
+      <li><div><b>좌석 배치</b><span>자동으로 앉혀져요. 바꿀 자리만 눌러서 고치세요.</span></div></li>
+      <li><div><b>출력</b><span>미리보기를 확인하고 PDF로 저장해요.</span></div></li></ol>
+      <div><button class="btn primary" data-view="seat">시험실 세팅 시작</button></div></div>
+    <div class="panel setcard"><h2 class="sec">시간표 만들기</h2><ol class="steps">
+      <li><div><b>과목 설정</b><span>학교 과목코드표를 불러오고, 교실별로 붙일 학년을 정해요.</span></div></li>
+      <li><div><b>시간표 입력</b><span>시험 기간을 정하면 평일이 자동으로 채워져요. 교시마다 과목을 고르세요.</span></div></li>
+      <li><div><b>출력</b><span>교실별 시간표를 미리보고 PDF로 저장해요.</span></div></li></ol>
+      <div><button class="btn primary" data-view="tt">시간표 만들기 시작</button></div></div>
+    <div class="panel setcard"><h2 class="sec">전체 진행 상황</h2>${flowHTML()}</div></div>`;
+}
+function faqView(){
+  const Q = (q, a) => `<details class="faq"><summary>${q}</summary><p>${a}</p></details>`;
+  return `<div class="pageview"><div class="panel">
+    ${Q("데이터는 어디에 저장되나요?", document.getElementById("storeInfo").innerHTML || "이 브라우저에 저장돼요.")}
+    ${Q("다른 컴퓨터에서 이어서 하고 싶어요.", "설정 › 백업 저장으로 .json 파일을 받은 뒤, 다른 컴퓨터에서 ‘가져오기’로 불러오세요. 가져오기 전에 무엇이 바뀌는지 먼저 보여 줘요.")}
+    ${Q("시간표와 자리 배치는 서로 연결되나요?", "아니요, 따로 저장돼요. 한쪽을 고쳐도 다른 쪽은 그대로예요. 시험명만 ‘시간표의 시험명 가져오기’로 옮길 수 있어요.")}
+    ${Q("실수로 지웠어요.", "화면 위의 ‘되돌리기’를 누르면 직전 상태로 돌아가요. 새로고침하면 되돌리기 기록은 사라져요.")}
+    ${Q("인쇄하면 미리보기와 조금 달라요.", "미리보기는 PDF와 같은 그림이에요. 인쇄할 때 프린터 설정에서 ‘실제 크기(100%)’를 고르면 가장 비슷하게 나와요.")}
+    ${Q("학생 이름도 저장되나요?", "아니요. 학년·반·번호만 저장해요. 백업 파일을 메일로 보낼 땐 받는 사람을 꼭 확인하세요.")}
+    ${Q("체험용 데이터는 뭔가요?", "예시 자료로 둘러볼 때 들어가는 가짜 데이터예요. ‘체험 끝내기’로 지우거나 ‘이대로 고쳐 쓰기’로 실제 자료로 바꿀 수 있어요.")}
+  </div></div>`;
+}
+// ---- 테마 ----
+function applyTheme(t){
+  if(t === "light" || t === "dark") document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
+  const dark = t === "dark" || (t !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  const tb = document.getElementById("themeBtn"); if(tb) tb.innerHTML = `<svg><use href="#i-${dark ? "moon" : "sun"}"/></svg>`;
+  document.querySelectorAll('#themePick input').forEach(i => i.checked = i.value === (t || "auto"));
+}
+let theme = "auto"; try { theme = localStorage.getItem(LS_THEME) || "auto"; } catch(e){}
+applyTheme(theme);
+function setTheme(t){ theme = t; try { localStorage.setItem(LS_THEME, t); } catch(e){} applyTheme(t); try { render(); } catch(e){} }
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const dark = document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+  setTheme(dark ? "light" : "dark");
+});
+document.getElementById("themePick").addEventListener("change", e => { if(e.target.name === "themePick") setTheme(e.target.value); });
+// 메뉴 · 페이지 제목 · 홈 카드 어디서든 data-view 로 이동
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-view]"); if(!b || !shellEl.contains(b)) return;
+  e.preventDefault(); e.stopPropagation(); setView(b.dataset.view);
+}, true);
 try { const t = localStorage.getItem(LS_STAB); if(["room","place","print"].includes(t)) seatTab = t; } catch(e){}
 
 /* ---------- 저장 (시간표 = app/state, 자리 배치 = app/seats — 서로 다른 문서) ---------- */
@@ -701,7 +1037,7 @@ function undoLast(){
 function updateUndo(){
   const b = document.getElementById("undoBtn"); if(!b) return;
   const u = [...undoStack].reverse().find(x => x.which === app);
-  b.hidden = !u; if(u){ b.textContent = "↶ 되돌리기"; b.title = `되돌리기: ${u.label}`; }
+  b.hidden = !u; if(u){ b.innerHTML = `<svg aria-hidden="true" style="width:16px;height:16px"><use href="#i-undo"/></svg>되돌리기`; b.title = `되돌리기: ${u.label}`; }
 }
 let flashTimer = null;
 function flash(t){ const el = document.getElementById("footMsg"); if(!el) return; el.textContent = t; clearTimeout(flashTimer); flashTimer = setTimeout(() => { if(el.textContent === t) el.textContent = ""; }, 6000); }
@@ -845,12 +1181,11 @@ function seatSteps(){
 }
 function renderNav(){
   wrapEl.dataset.app = app;
-  document.querySelectorAll(".apps .app").forEach(b => b.setAttribute("aria-selected", String(b.dataset.app === app)));
-  const list = app === "tt" ? TT_TABS : SEAT_TABS, cur = app === "tt" ? tab : seatTab;
+    const list = app === "tt" ? TT_TABS : SEAT_TABS, cur = app === "tt" ? tab : seatTab;
   let steps = {};
   try { steps = app === "tt" ? ttSteps() : seatSteps(); } catch(e){}
   tabsEl.setAttribute("aria-label", app === "tt" ? "시험 시간표 단계" : "시험 자리 배치 단계");
-  tabsEl.innerHTML = list.map(([k,l],i) => { const st = steps[k]; return `<button role="tab" id="tab-${k}" data-tab="${k}" aria-selected="${k===cur}"><span class="n">${i+1}</span>${l}${st ? `<span class="st st-${st}">${stLabel(k, st, steps.cnt && steps.cnt[k])}</span>` : ""}</button>`; }).join("");
+  tabsEl.innerHTML = list.map(([k,l],i) => { const st = steps[k]; return `<button role="tab" id="tab-${k}" data-tab="${k}" aria-selected="${k===cur}"><span class="n">${i+1}</span><span class="lb">${l}</span>${st ? `<span class="st st-${st}">${stLabel(k, st, steps.cnt && steps.cnt[k])}</span>` : ""}</button>`; }).join("");
   // 첫 화면 카드: 두 도구의 현재 상태 요약
   try {
     const ttEl = document.getElementById("ttCardStat"), seEl = document.getElementById("seatCardStat");
@@ -881,8 +1216,12 @@ function render(){
 function renderNow(){
   const fk = focusKey(document.activeElement), sy = window.scrollY;
   if(app === "seat") try { ensureSeat(); } catch(e){} // 단계 배지·카드 요약이 처음 화면부터 실제 데이터를 반영하도록
-  renderNav(); updateUndo(); updateStoreInfo();
+  renderNav(); updateUndo(); updateStoreInfo(); paintShell();
   try {
+    if(view !== "tt" && view !== "seat"){
+      main.innerHTML = view === "home" ? homeView() : view === "saved" ? savedView() : view === "help" ? helpView() : view === "faq" ? faqView() : "";
+      restoreFocus(fk); return;
+    }
     if(app === "seat"){ ensureSeat(); renderSeat(); return; }
     if(!hasContent(state) && tab !== "output"){ main.innerHTML = emptyView(); return; }
     if(tab === "subjects") main.innerHTML = trialBar() + guideBox() + subjectsView();
@@ -913,7 +1252,7 @@ function markInlineIssues(){
 }
 // ---- 단계 안내: 이 단계에서 할 일 · 넘어가기 전 확인할 것(실제 데이터로 판정) · 다음 단계 ----
 const LS_GUIDE = "exam-guide-closed";
-let guideClosed = false; try { guideClosed = localStorage.getItem(LS_GUIDE) === "1"; } catch(e){}
+let guideClosed = false; guideClosed = true; try { guideClosed = localStorage.getItem(LS_GUIDE) !== "0"; } catch(e){}
 function guideBox(){
   let g = null;
   try { g = guideData(); } catch(e){ return ""; }
@@ -1019,19 +1358,13 @@ function flowHTML(){
   return `<ol class="flow" aria-label="권장 작업 순서">${items.map(([a,b,st],i) => { const [c,l] = S(st); return `<li class="${c}"><b>${i+1}. ${a}</b><span class="hint">${b}</span><span class="fs">${c === "done" ? "✓ " : c === "check" ? "! " : ""}${l}</span></li>`; }).join("")}</ol>`;
 }
 function emptyView(){
-  return `<div class="panel empty"><div class="home">
-    <div><h2 style="text-align:left">시험실 세팅 도우미로 할 수 있는 일</h2></div>
-    <div class="can"><div><b>시험 시간표</b> — 날짜·교시별 과목을 입력하면 교실 문에 붙일 <b>교실별 시험 시간표 PDF</b>를 만들어요.</div>
-      <div><b>시험 자리 배치도</b> — 시험실·응시 학생을 정하면 좌석을 자동으로 배치하고 <b>시험실별 자리 배치도 PDF</b>를 만들어요.</div></div>
-    <div><b style="font-size:13.5px">권장 작업 순서</b> <span class="hint">순서대로 하지 않아도 돼요. 위의 두 카드와 단계 탭으로 언제든 원하는 곳으로 갈 수 있어요.</span>${flowHTML()}</div>
-    <div><b style="font-size:13.5px">어떻게 시작할까요?</b></div>
-    <div class="paths">
-      <button class="path main" data-act="loadCodes"><b>새 시험 준비하기</b><small>우리 학교 ${bookOf(CODE_BOOK_LATEST).title}(${bookCount(CODE_BOOK_LATEST)}과목)를 불러와 실제 시험 자료를 만들어요. 1학기 코드표로도 바꿀 수 있어요.</small><span class="go">과목 설정부터 시작 →</span></button>
-      <button class="path" data-act="loadStarter"><b>예시 자료로 둘러보기</b><small>2026년 6월 기말고사를 본뜬 <b>체험용 데이터</b>예요. 지금 시간표가 비어 있어 실제 자료에 영향이 없고, ‘체험 끝내기’로 언제든 지울 수 있어요.</small><span class="go">예시 데이터로 체험하기 →</span></button>
-      <button class="path" data-act="openImport"><b>기존 자료 불러오기</b><small>다른 컴퓨터에서 ‘백업 파일 저장’으로 만든 .json 파일을 가져와 이어서 작업해요. 가져오기 전에 무엇이 바뀌는지 먼저 보여 줘요.</small><span class="go">백업 파일 가져오기 →</span></button>
+  return `<div class="starthead"><span class="ic">${IC("cal")}</span><h2>시험 시간표를 시작해 볼까요?</h2><p class="hint">시작 방법을 하나 골라 주세요.</p></div>
+    <div class="starts">
+      <button class="start main" data-act="loadCodes"><b>새 시험 준비하기</b><small>${esc(bookOf(CODE_BOOK_LATEST).title)}를 불러와 바로 시작해요.</small><span class="go">시작하기 ${IC("arrow")}</span></button>
+      <button class="start" data-act="loadStarter"><b>예시로 둘러보기</b><small>체험용 데이터로 먼저 써 봐요. 언제든 지울 수 있어요.</small><span class="go">둘러보기 ${IC("arrow")}</span></button>
+      <button class="start" data-act="openImport"><b>백업 불러오기</b><small>다른 컴퓨터에서 저장한 .json 파일로 이어서 해요.</small><span class="go">불러오기 ${IC("arrow")}</span></button>
     </div>
-    <p class="hint" style="margin:0">과목코드표 없이 직접 입력하려면 <button class="linkbtn" data-act="startBlank">과목 없이 빈 상태로 시작</button>하세요. 자리 배치도만 만들려면 위의 ‘시험 자리 배치도’ 카드를 누르세요.</p>
-  </div></div>`;
+    <p class="hint" style="text-align:center;margin-top:16px">과목을 직접 입력하려면 <button class="linkbtn" data-act="startBlank">빈 상태로 시작</button></p>`;
 }
 function emptyViewOld(){
   return `<div class="panel empty">
@@ -1051,7 +1384,7 @@ function emptyViewOld(){
 // 체험용(예시) 데이터 표시 — 실제 시험 데이터와 헷갈리지 않게
 function trialBar(){
   if(!state.example) return "";
-  return `<div class="warnline" role="note" style="margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px"><span><span class="trialtag">체험용 데이터</span>지금 보이는 시간표는 2026년 6월 기말고사를 본뜬 예시예요. 실제 시험 준비에 쓰려면 날짜·과목을 고친 뒤 ‘이대로 고쳐 쓰기’를 누르세요.</span>
+  return `<div class="warnline" role="note" style="margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px"><span><span class="trialtag">체험용 데이터</span>예시 시간표로 둘러보는 중이에요.</span>
     <span style="flex:1"></span><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" data-act="keepTrial">이대로 고쳐 쓰기</button><button class="btn ghost danger" data-act="endTrial" title="예시 시간표를 지우고 첫 화면으로 돌아가요. ‘되돌리기’로 되살릴 수 있어요">체험 끝내기</button></span></div>`;
 }
 function codeBookPanel(){
@@ -1082,7 +1415,7 @@ function roomsPanel(){
     </div>`).join("");
   return `<section class="panel" style="margin-bottom:14px;display:flex;flex-direction:column;gap:6px">
       <h2 class="sec">교실 구성</h2>
-      <p class="hint">교실마다 어느 학년이 함께 시험을 보는지 정해 두세요. 왼쪽 학년이 시간표의 왼쪽 열에 들어가요. 시간표 입력에는 여기서 쓰는 학년만 나와요.</p>
+      <p class="hint">교실마다 함께 시험 보는 학년을 정해요. 왼쪽 학년이 시간표 왼쪽 열이에요.</p>
       <div>${rows}</div>
       <div class="row"><button class="btn" data-act="addRoom">+ 교실 추가</button></div>
     </section>`;
@@ -1113,7 +1446,7 @@ function subjectsView(){
       </div>
     </details>`;
   }).join("");
-  return `${roomsPanel()}${codeBookPanel()}<p class="hint">처음 한 번만 하면 돼요. 학년별 과목명과 과목코드를 등록해 두면, 시간표 입력에서 과목명만 고르면 코드가 자동으로 붙어요. 코드는 시간표에 <b>(04)</b>처럼 찍혀요.</p>
+  return `${roomsPanel()}${codeBookPanel()}<p class="hint">한 번만 등록하면 시간표에서 과목만 고를 때 코드가 자동으로 붙어요.</p>
     <div class="grades" style="align-items:start">${cards}</div>`;
 }
 
@@ -1253,7 +1586,7 @@ function scheduleView(){
         <div class="times">${times}<button class="btn ghost" data-act="addDT">+ 교시</button>${state.defaultTimes.length>1?`<button class="btn ghost" data-act="rmDT">− 교시</button>`:""}
           ${state.days.length ? `<button class="btn" data-act="applyTimes" title="입력한 모든 날짜의 1~${state.defaultTimes.length}교시 시험시간을 위 기본 시간으로 바꿔요. 과목은 그대로예요">모든 날짜에 기본 시간 적용…</button>` : ""}</div>
       </div>
-      <p class="hint" style="margin-top:8px">과목 옆 ＋ 버튼으로 같은 교시에 선택과목을 더 넣을 수 있어요. 자동 생성은 추가될 날짜를 먼저 보여 주고, 이미 입력한 날짜는 건드리지 않아요. 교실 구성·기본 시간·용지·글꼴은 다음 시험에도 그대로 이어져요.</p>
+      <p class="hint" style="margin-top:8px">과목 옆 ＋ 로 같은 교시에 선택과목을 더 넣을 수 있어요.</p>
     </div>
     <div class="panel" style="margin-top:14px;padding:0;overflow:hidden">
       ${state.days.length ? `<div class="tablewrap"><table class="grid">
@@ -1849,10 +2182,10 @@ function seatRoomView(){
           <button class="btn danger" data-sact="newSeatExam">새 시험 준비 (모든 시험실)…</button>
         </div>
       </div>
-      <p class="hint" style="margin-top:8px">제목은 “${esc(seatTitle(seat.examTitle))}”로 찍혀요. 자리 배치는 시간표와 따로 저장돼서, 여기서 바꿔도 시간표는 그대로예요. ‘새 시험 준비’는 <b>모든 시험실</b>의 교실 구조·응시 집단은 두고 결번과 직접 고친 자리만 지워요.</p>
+      <p class="hint" style="margin-top:8px">제목: “${esc(seatTitle(seat.examTitle))}”</p>
     </div>
     ${seatConfirmBox()}
-    ${seat.example ? `<div class="warnline" style="margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px"><span><span class="trialtag">체험용 데이터</span>처음에는 <b>예시 시험실</b>(1-3교실: 1-3 + 2-3)이 들어 있어요. 학년·반·번호·결번을 이번 시험에 맞게 바꿔 쓰면 체험용 표시가 사라져요. 시간표 데이터와는 따로 저장돼요.</span><span style="flex:1"></span><button class="btn" data-sact="keepTrial">이대로 쓰기</button></div>` : ""}
+    ${seat.example ? `<div class="warnline" style="margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px"><span><span class="trialtag">체험용 데이터</span>예시 시험실이에요. 학년·반·번호를 바꿔 쓰면 이 표시가 사라져요.</span><span style="flex:1"></span><button class="btn" data-sact="keepTrial">이대로 쓰기</button></div>` : ""}
     ${seatMsg ? `<div class="warnline" style="margin-bottom:14px">${esc(seatMsg)}</div>` : ""}
     ${roomBar()}
     <div class="seat-2col">
@@ -2563,12 +2896,6 @@ tabsEl.addEventListener("click", e => {
   tab = b.dataset.tab; try { localStorage.setItem(LS_TAB, tab); } catch(err){}
   render(); window.scrollTo({top:0});
 });
-document.querySelector(".apps").addEventListener("click", e => {
-  const b = e.target.closest("button[data-app]"); if(!b || b.dataset.app === app) return;
-  app = b.dataset.app; selSeat = null; selStu = null; armed = null;
-  try { localStorage.setItem(LS_APP, app); } catch(err){}
-  render(); window.scrollTo({top:0});
-});
 let armed = null;
 main.addEventListener("click", e => {
   const sg = e.target.closest("[data-sgoto]");
@@ -2579,6 +2906,10 @@ main.addEventListener("click", e => {
   if(go){ tab = go.dataset.goto; try { localStorage.setItem(LS_TAB, tab); } catch(err){} render(); window.scrollTo({top:0}); return; }
   const b = e.target.closest("[data-act]"); if(!b) return;
   const a = b.dataset.act, g = b.dataset.g;
+  if(a === "savedFilter"){ savedFilter = b.dataset.f; return render(); }
+  if(a === "savedOpen") return setView(b.dataset.to);
+  if(a === "savedArch"){ app = "tt"; tab = "schedule"; showArchive = true; ttConfirm = {kind:"copy", id:b.dataset.id, dates:"keep"}; try { localStorage.setItem(LS_TAB, tab); } catch(e){} setView("tt"); const c = document.getElementById("ttConfirm"); if(c) c.scrollIntoView({block:"center"}); return; }
+  if(a === "savedTpl"){ structOpen = true; seatTab = "room"; try { localStorage.setItem(LS_STAB, "room"); } catch(e){} setView("seat"); const sel = document.getElementById("tplSel"); if(sel){ sel.value = b.dataset.id; sel.scrollIntoView({block:"center"}); sel.focus({preventScroll:true}); } return; }
   if(a === "goFix") return goFix(b);
   if(a === "scrollTo"){ const el = document.getElementById(b.dataset.id); if(el){ el.scrollIntoView({block:"start"}); try { el.focus({preventScroll:true}); } catch(e){} } return; }
   if(a === "openImport"){ document.getElementById("importJson").click(); return; }

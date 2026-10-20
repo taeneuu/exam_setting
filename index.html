@@ -877,7 +877,7 @@ function savedView(){
     items.push(`<div class="saveitem"><span class="ic k-tt">${IC("cal")}</span><span class="tx"><b>${esc(a.examTitle || "(시험명 없음)")}<small>(시간표)</small></b><small>${esc(fmtSaved(a.savedAt).replace(" 보관",""))} · ${s.days}일 · ${s.periods}교시</small></span><button class="btn" data-act="savedArch" data-id="${a.id}">불러오기</button><button class="btn ghost danger" data-act="delArch" data-id="${a.id}" title="보관 삭제">삭제</button></div>`); });
   if((f === "all" || f === "tpl") && seat) seat.templates.forEach(t => items.push(`<div class="saveitem"><span class="ic k-tpl">${IC("seat")}</span><span class="tx"><b>${esc(t.name)}<small>(교실 구조)</small></b><small>${t.cols}열 × ${t.rows}행</small></span><button class="btn" data-act="savedTpl" data-id="${t.id}">불러오기</button></div>`));
   if(f === "forms") items.length = 0;
-  if(f === "all" || f === "forms") FORM_LIST.forEach(F => items.push(`<div class="saveitem"><span class="ic k-form">${IC("doc")}</span><span class="tx"><b>${esc(F.t)}<small>(서식)</small></b><small>${esc(F.d)}</small></span>${F.file ? `<a class="btn" href="${F.file}" target="_blank" rel="noopener">열기</a>` : `<button class="btn primary" data-act="formOpen" data-k="${F.k}">작성하기</button>`}</div>`));
+  if(f === "all" || f === "forms") FORM_LIST.forEach(F => items.push(`<div class="saveitem" data-form="${F.k}"><span class="ic k-form">${IC("doc")}</span><span class="tx"><b>${esc(F.t)}<small>(서식)</small></b><small>${esc(F.d)}</small></span>${F.file ? `<a class="btn" href="${F.file}" target="_blank" rel="noopener">열기</a>` : `<button class="btn primary" data-act="formOpen" data-k="${F.k}">작성하기</button>`}</div>`));
   const fb = (k, l) => `<button data-act="savedFilter" data-f="${k}" aria-pressed="${f===k}">${l}</button>`;
   return `<div class="filters">${fb("all","전체")}${fb("seat","시험실 세팅")}${fb("tt","시간표")}${fb("tpl","교실 구조")}${fb("forms","서식")}</div>
     <div class="panel" style="padding:0"><div class="savelist">${items.join("") || `<div class="emptybox">아직 저장한 자료가 없어요.</div>`}</div></div>
@@ -894,7 +894,8 @@ function helpView(){
       <li><div><b>과목 설정</b><span>학교 과목코드표를 불러오고, 교실별로 붙일 학년을 정해요.</span></div></li>
       <li><div><b>시간표 입력</b><span>시험 기간을 정하면 평일이 자동으로 채워져요. 교시마다 과목을 고르세요.</span></div></li>
       <li><div><b>출력</b><span>교실별 시간표를 미리보고 PDF로 저장해요.</span></div></li></ol>
-      <div><button class="btn primary" data-act="tutorial" data-t="tt">시간표 만들기 튜토리얼 시작</button></div></div></div>`;
+      <div><button class="btn primary" data-act="tutorial" data-t="tt">시간표 만들기 튜토리얼 시작</button></div></div>
+    <div class="panel setcard"><h2 class="sec">저장함 · 서식</h2><ol class="steps"><li><div><b>서식 열기</b><span>시간 안내 PDF는 열어서 인쇄하고, 응시현황표는 작성하기로 입력해요.</span></div></li><li><div><b>인쇄 · PDF 저장</b><span>입력한 서식을 그대로 인쇄하거나 PDF로 저장해요.</span></div></li></ol><div><button class="btn primary" data-act="tutorial" data-t="saved">저장함·서식 튜토리얼 시작</button></div></div></div>`;
 }
 function faqView(){
   const Q = (q, a) => `<details class="faq"><summary>${q}</summary><p>${a}</p></details>`;
@@ -964,20 +965,28 @@ document.addEventListener("keydown", e => { if(e.key === "Escape"){ if(!modalEl.
 
 // 튜토리얼: 실제 화면의 칸을 하나씩 짚어 주는 안내 (데이터는 건드리지 않아요)
 const TUTORIALS = {
-  seat: {title:"시험실 세팅", app:"seat", steps:[
+  seat: {title:"시험실 세팅", app:"seat", demo:"seat", steps:[
     {tab:"room", sel:"#seatTitle", t:"시험명", x:"자리 배치도 위에 찍힐 제목이에요. 비워 두면 ‘시험 자리 배치도’로 찍혀요."},
     {tab:"room", sel:".grp", t:"응시 학생", x:"학년·반·번호 범위와 결번을 넣으면 응시 인원이 자동으로 계산돼요."},
     {tab:"room", sel:"#structBox", t:"교실 구조", x:"좌석 열·행 수와 출입문 위치를 실제 교실에 맞춰요. 저장해 두면 다음 시험에도 불러 쓸 수 있어요."},
     {tab:"place", sel:".sstats", t:"배치 결과 요약", x:"학생은 자동으로 앉혀져요. 미배정·중복 배정이 0명인지만 확인하세요."},
     {tab:"place", sel:".classroom-wrap", t:"좌석 고치기", x:"바꿀 자리만 눌러서 서로 바꿔요. 직접 고친 자리는 그대로 유지돼요."},
     {tab:"print", sel:"[data-sact=spdfAll]", t:"PDF 저장", x:"미리보기를 확인하고 PDF로 저장하면 끝이에요."}]},
-  tt: {title:"시간표 만들기", app:"tt", steps:[
-    {tab:"subjects", sel:".starts, .codebook", t:"시작하기", x:"‘새 시험 준비하기’를 누르면 학교 과목코드표가 들어와요. 이미 시작했다면 이 칸에서 코드표를 관리해요."},
+  tt: {title:"시간표 만들기", app:"tt", demo:"tt", steps:[
     {tab:"subjects", sel:".roomrow", t:"교실 구성", x:"교실마다 함께 시험 보는 학년을 정해요. 한 학년만 응시하면 오른쪽 학년을 ‘없음’으로 두세요."},
     {tab:"subjects", sel:".codebook", t:"과목코드표", x:"학기 코드표를 고르거나 ‘내 코드표 만들기’로 직접 등록할 수 있어요."},
+    {tab:"subjects", sel:".grades", t:"학년별 과목", x:"학년마다 과목과 코드가 들어 있어요. 과목을 더하거나 지울 수 있고, 여러 과목을 한꺼번에 붙여 넣을 수도 있어요."},
     {tab:"schedule", sel:"#rangeStart", t:"시험 기간", x:"시작일과 종료일을 넣고 ‘평일 자동 생성’을 누르면 날짜가 채워져요."},
     {tab:"schedule", sel:"table.grid", t:"교시별 과목", x:"교시마다 학년별 과목을 골라요. 과목 옆 ＋로 선택과목을 더 넣을 수 있어요."},
-    {tab:"output", sel:"[data-act=pdfSel]", t:"PDF 저장", x:"교실별 미리보기를 확인하고 PDF로 저장해요."}]}
+    {tab:"output", sel:"[data-act=pdfSel]", t:"PDF 저장", x:"교실별 미리보기를 확인하고 PDF로 저장해요."}]},
+  saved: {title:"저장함 · 서식", app:"saved", steps:[
+    {view:"saved", sel:".filters", t:"저장함", x:"만들어 둔 시험실 세팅·시간표·교실 구조와 서식이 모여 있어요. 위의 버튼으로 골라 볼 수 있어요."},
+    {view:"saved", sel:"[data-form=time]", t:"시험 시간 안내", x:"교실 게시용 PDF예요. ‘열기’를 누르면 새 탭에서 열리고, 거기서 바로 인쇄해요. 고칠 필요는 없어요."},
+    {view:"saved", sel:"[data-form=reg]", t:"정기시험 응시현황표", x:"‘작성하기’를 누르면 화면에서 바로 입력할 수 있어요."},
+    {view:"saved", sel:"[data-form=mock]", t:"모의고사 응시현황표", x:"시험실 문에 붙이는 B4 가로 서식이에요. 작성 방법은 정기시험과 같아요."},
+    {view:"form", form:"reg", sel:".paper", t:"서식 입력", x:"점선 칸에 입력해요. 번호 범위·결번·결시 번호를 넣으면 재적·결시·응시 인원이 자동 계산돼요(파란 글씨). 직접 고치면 그 값이 우선이에요."},
+    {view:"form", form:"reg", sel:"[data-act=formPrint]", t:"인쇄 · PDF 저장", x:"누르면 인쇄 창이 열려요. 프린터 대신 ‘PDF로 저장’을 고르면 파일로 받을 수 있어요. 입력한 내용은 이 브라우저에 남아요."},
+    {view:"form", form:"mock", sel:".paper", t:"모의고사 서식", x:"같은 방식으로 입력해요. 맨 위 큰 칸(학교번호)은 크게 인쇄돼요."}]}
 };
 let tut = null;
 const tutEl = document.createElement("div");
@@ -986,17 +995,32 @@ tutEl.innerHTML = `<div class="tutblock"></div><div class="tuthl"></div><div cla
 document.body.appendChild(tutEl);
 function startTutorial(k){
   const T = TUTORIALS[k]; if(!T) return;
-  tut = {k, T, i:0}; tutEl.hidden = false; tutGo(0);
+  // 내 데이터는 그대로 두고, 안내용 예시 데이터로 화면을 보여 줘요 (끝나면 원래대로 되돌림)
+  tut = {k, T, i:0, real:{state, seat}};
+  try { if(T.demo === "tt") state = starterState(); if(T.demo === "seat") seat = seatDefault(""); } catch(e){}
+  tutEl.hidden = false; tutGo(0);
 }
-function endTutorial(){ tut = null; tutEl.hidden = true; }
+function endTutorial(){
+  if(!tut) return;
+  const real = tut.real; tut = null; tutEl.hidden = true;
+  state = real.state; seat = real.seat;
+  ttConfirm = null; genPreview = null; showArchive = false; selSeat = null; selStu = null; bookEdit = null;
+  setView("help");
+}
 function tutGo(i){
   const st = tut.T.steps[i]; tut.i = i;
-  const same = view === tut.T.app && (tut.T.app === "tt" ? tab === st.tab : seatTab === st.tab);
+  const v = st.view || tut.T.app;
+  let same = view === v;
+  if(same && v === "tt") same = tab === st.tab;
+  if(same && v === "seat") same = seatTab === st.tab;
+  if(same && v === "form") same = formKey === st.form;
   if(!same){
-    view = tut.T.app; app = view;
-    if(app === "tt"){ tab = st.tab; try { localStorage.setItem(LS_TAB, tab); } catch(e){} }
-    else { seatTab = st.tab; try { localStorage.setItem(LS_STAB, seatTab); } catch(e){} }
-    try { localStorage.setItem(LS_VIEW, view); localStorage.setItem(LS_APP, app); } catch(e){}
+    view = v;
+    if(v === "tt" || v === "seat") app = v;
+    if(v === "tt") tab = st.tab;
+    if(v === "seat") seatTab = st.tab;
+    if(v === "form") formKey = st.form;
+    if(v === "saved") savedFilter = "all";
     render();
   }
   requestAnimationFrame(() => requestAnimationFrame(() => tutPlace(true)));
@@ -1008,7 +1032,7 @@ function tutPlace(scroll){
   if(el && scroll) el.scrollIntoView({block:"center"});
   const hl = tutEl.querySelector(".tuthl"), pop = tutEl.querySelector(".tutpop");
   const last = tut.i === n - 1;
-  pop.innerHTML = `<div class="tutcount">${tut.T.title} · ${tut.i + 1} / ${n}</div><b>${st.t}</b><p>${st.x}</p>${el ? "" : `<p class="hint">지금 화면에는 이 칸이 없어요. 시작하면 나타나요.</p>`}
+  pop.innerHTML = `<div class="tutcount">${tut.T.title} · ${tut.i + 1} / ${n}${tut.T.demo ? " · 예시 화면" : ""}</div><b>${st.t}</b><p>${st.x}</p>
     <div class="row" style="justify-content:space-between"><button class="btn ghost" data-tut="end">그만 보기</button><span class="row">${tut.i ? `<button class="btn" data-tut="prev">이전</button>` : ""}<button class="btn primary" data-tut="${last ? "end" : "next"}">${last ? "완료" : "다음"}</button></span></div>`;
   const vw = window.innerWidth, vh = window.innerHeight, pw = Math.min(340, vw - 24);
   pop.style.width = pw + "px";

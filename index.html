@@ -417,7 +417,7 @@ nav.tabs button .st-done,nav.tabs button .st-ready,nav.tabs button .st-printed{d
 nav.tabs button:has(.st-done) .n,nav.tabs button:has(.st-ready) .n,nav.tabs button:has(.st-printed) .n{border-color:var(--accent);color:var(--accent)}
 nav.tabs button[aria-selected="true"]:has(.st-done) .n,nav.tabs button[aria-selected="true"]:has(.st-ready) .n{color:var(--accent-ink)}
 .navrow #undoBtn{display:flex;align-items:center;gap:4px}
-.shell[data-page="home"] .navrow,.shell[data-page="saved"] .navrow,.shell[data-page="settings"] .navrow,.shell[data-page="help"] .navrow,.shell[data-page="faq"] .navrow{display:none}
+.shell[data-page="home"] .navrow,.shell[data-page="saved"] .navrow,.shell[data-page="settings"] .navrow,.shell[data-page="help"] .navrow,.shell[data-page="faq"] .navrow,.shell[data-page="form"] .navrow{display:none}
 
 /* 단계 안내: 얇은 한 줄로 */
 details.guide{border:1px solid var(--line);border-left:1px solid var(--line);border-radius:var(--radius);padding:10px 16px;background:var(--surface);box-shadow:var(--shadow)}
@@ -557,9 +557,74 @@ details.faq p{margin:8px 0 0;color:var(--muted);font-size:13.5px}
 .tutpop b{font-size:16px;font-weight:800}
 .tutpop p{margin:0;font-size:13.5px;line-height:1.55}
 .tutcount{font-size:11.5px;font-weight:700;color:var(--accent)}
+
+/* 서식 */
+.k-form{background:#f1e9fb;color:#7a4bc2}
+:root[data-theme="dark"] .k-form{background:#2e2640;color:#d6c8f5}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .k-form{background:#2e2640;color:#d6c8f5}}
+.saveitem .ic.k-form{background:#f1e9fb;color:#7a4bc2}
+:root[data-theme="dark"] .saveitem .ic.k-form{background:#2e2640;color:#d6c8f5}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .saveitem .ic.k-form{background:#2e2640;color:#d6c8f5}}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.formbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:14px}
+.formstage{overflow-x:auto;padding:4px 0 20px}
+.paperwrap{margin:0 auto}
+.paper{background:#fff;color:#111;box-shadow:0 8px 34px rgba(90,55,20,.18);position:relative;transform-origin:top left;overflow:hidden;font-family:var(--body);box-sizing:border-box}
+.paper *{box-sizing:border-box}
+.paper .pp{position:absolute;inset:0}
+.paper input.ff,.paper textarea.ff{font:inherit;color:#111;background:transparent;border:0;border-bottom:1.5px dashed #cdbfb0;border-radius:0;outline:0;text-align:center;padding:0 2px;min-width:0;min-height:0;box-shadow:none;resize:none;letter-spacing:0}
+.paper input.ff:focus,.paper textarea.ff:focus{background:#fff3e8;border-bottom:1.5px solid var(--accent,#f26b1d);outline:0}
+.paper input.ff.auto{color:#2b4f9e}
+.paper th{font-weight:800}
+.paper .cl{display:flex;align-items:baseline;gap:8px}
+.paper .cl .grow{flex:1;text-align:left}
+.paper .lb{white-space:nowrap}
+/* 정기시험 (A4 세로) */
+.reg .regtitle{position:absolute;left:0;right:0;top:92px;text-align:center;font-size:40px;font-weight:800;letter-spacing:-.02em}
+.reg .regtitle input{font-size:40px;font-weight:800;width:90px;vertical-align:baseline}
+.reg .regtag{position:absolute;right:76px;top:164px;font-size:24px;font-weight:800}
+.reg .regtag input{width:140px;text-align:right;font-weight:800;font-size:24px}
+.reg .rtab{position:absolute;left:76px;right:76px;top:226px;border-collapse:collapse;table-layout:fixed;font-size:20px}
+.reg .rtab th,.reg .rtab td{border:1.5px solid #111;padding:0 16px;vertical-align:middle}
+.reg .rtab th{width:190px;background:#f7f2ea;text-align:center;line-height:1.5}
+.reg .rtab th small{display:block;font-size:15px;font-weight:700;color:#444}
+.reg .rtab .h70{height:70px}.reg .rtab .h58{height:58px}.reg .rtab .h130{height:130px}
+.reg .rtab td .cl + .cl{margin-top:12px}
+.reg .rtab input.ff{font-size:20px;height:34px}
+.reg .w70{width:76px}.reg .w90{width:90px}
+/* 모의고사 (B4 가로) */
+.mock .mtab{position:absolute;left:46px;right:46px;top:44px;bottom:44px;width:calc(100% - 92px);height:calc(100% - 88px);border-collapse:collapse;table-layout:fixed}
+.mock .mtab th,.mock .mtab td{border:1.5px solid #111;vertical-align:middle;padding:0 24px}
+.mock .mtab th{width:32%;font-size:60px;font-weight:800;text-align:center;background:#fff}
+.mock .mtab th.yel{background:#fff6cc}
+.mock .r1{height:31%}.mock .r2{height:14%}.mock .r3{height:27%}
+.mock .mtab td{font-size:56px;font-weight:700}
+.mock input.ff.big{width:100%;height:210px;line-height:1.3;font-size:150px;font-weight:800;border-bottom-color:transparent}
+.mock input.ff.big:hover{border-bottom:1.5px dashed #cdbfb0}
+.mock .cl.c{justify-content:center;gap:10px}
+.mock .cl.s{font-size:34px;gap:14px;margin:6px 0;font-weight:700}
+.mock .cl.s .grow{font-size:34px;text-align:left;height:50px}
+.mock input.ff{font-size:56px;font-weight:700;height:84px}
+.mock .w140{width:170px}.mock .w110{width:130px}
+.mock textarea.ff.tall{width:100%;height:100%;font-size:48px;font-weight:700;padding:24px 8px 8px;border-bottom-color:transparent;line-height:1.3}
+.mock textarea.ff.tall:hover{border-bottom:1.5px dashed #cdbfb0}
+@media print{
+  html,body{background:#fff!important;height:auto!important}
+  .sidenav,.topbar,.tabbar,.toast,.formbar,.modal,.tut,#navrow,#syncBanner,#importBox{display:none!important}
+  .shell{display:block!important;min-height:0!important}
+  .content,.wrap{display:block!important;padding:0!important;margin:0!important;max-width:none!important}
+  .formstage{overflow:visible!important;padding:0!important}
+  .paperwrap{width:auto!important;height:auto!important;margin:0!important}
+  .paper{transform:none!important;box-shadow:none!important;margin:0!important;break-after:avoid}
+  .paper input.ff,.paper textarea.ff{border-bottom-color:transparent!important;background:transparent!important}
+  .paper input.ff.auto{color:#111!important}
+  .paper input.ff::placeholder{color:transparent}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 </style>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<svg width="0"
+ height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></symbol>
   <symbol id="i-seat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="5" rx="1"/><path d="M12 8v3M5 11h14M5 11v3M12 11v3M19 11v3"/><rect x="3" y="14" width="4" height="4" rx="1"/><rect x="10" y="14" width="4" height="4" rx="1"/><rect x="17" y="14" width="4" height="4" rx="1"/><path d="M4 18v3M6 18v3M11 18v3M13 18v3M18 18v3M20 18v3"/></symbol>
   <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M7.5 14h.01M12 14h.01M16.5 14h.01M7.5 17.5h.01M12 17.5h.01"/></symbol>
@@ -749,7 +814,7 @@ try { const a = localStorage.getItem(LS_APP); if(a === "tt" || a === "seat") app
 
 /* ---------- 새 화면: 홈 · 저장함 · 사용 방법 · 자주 묻는 질문 · 설정 ---------- */
 const LS_VIEW = "exam-view", LS_THEME = "exam-theme";
-const VIEWS = ["home","tt","seat","saved","settings","help","faq"];
+const VIEWS = ["home","tt","seat","saved","settings","help","faq","form"];
 let view = "home", savedFilter = "all";
 try { const v = localStorage.getItem(LS_VIEW); if(VIEWS.includes(v)) view = v; } catch(e){}
 if(view === "tt" || view === "seat") app = view;
@@ -760,17 +825,18 @@ function setView(v){
   if(!VIEWS.includes(v)) return;
   view = v;
   if(v === "tt" || v === "seat"){ if(app !== v){ app = v; selSeat = null; selStu = null; armed = null; } try { localStorage.setItem(LS_APP, app); } catch(e){} }
-  try { localStorage.setItem(LS_VIEW, v); } catch(e){}
+  try { localStorage.setItem(LS_VIEW, v === "form" ? "saved" : v); } catch(e){}
   render(); window.scrollTo({top:0});
 }
 function paintShell(){
   shellEl.dataset.page = view;
-  const cur = view === "help" || view === "faq" ? "home" : view;
+  const cur = view === "help" || view === "faq" ? "home" : view === "form" ? "saved" : view;
+  formPageRule();
   document.querySelectorAll("#menu button, .menu.bottom button, #tabbar button").forEach(b => { if(b.dataset.view === cur) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
   const pt = document.getElementById("pageTitle");
-  pt.innerHTML = view === "home" ? `<span class="mbrand"><span class="logo">${IC("logo")}</span>시험실 세팅 도우미</span>` : `<button class="back" data-view="home" aria-label="홈으로">${IC("back")}</button><span>${VIEW_TITLE[view]}</span>`;
+  pt.innerHTML = view === "home" ? `<span class="mbrand"><span class="logo">${IC("logo")}</span>시험실 세팅 도우미</span>` : `<button class="back" data-view="${view === "form" ? "saved" : "home"}" aria-label="뒤로">${IC("back")}</button><span>${view === "form" ? FORMS[formKey].title : VIEW_TITLE[view]}</span>`;
   document.getElementById("settingsView").hidden = view !== "settings";
-  document.title = view === "home" ? "시험실 세팅 도우미" : `${VIEW_TITLE[view]} · 시험실 세팅 도우미`;
+  document.title = view === "home" ? "시험실 세팅 도우미" : `${view === "form" ? FORMS[formKey].title : VIEW_TITLE[view]} · 시험실 세팅 도우미`;
 }
 function cardStats(){
   let tt = "", se = "";
@@ -810,8 +876,10 @@ function savedView(){
   if(f !== "tpl" && f !== "seat") state.archive.forEach(a => { const s = examSummary(a);
     items.push(`<div class="saveitem"><span class="ic k-tt">${IC("cal")}</span><span class="tx"><b>${esc(a.examTitle || "(시험명 없음)")}<small>(시간표)</small></b><small>${esc(fmtSaved(a.savedAt).replace(" 보관",""))} · ${s.days}일 · ${s.periods}교시</small></span><button class="btn" data-act="savedArch" data-id="${a.id}">불러오기</button><button class="btn ghost danger" data-act="delArch" data-id="${a.id}" title="보관 삭제">삭제</button></div>`); });
   if((f === "all" || f === "tpl") && seat) seat.templates.forEach(t => items.push(`<div class="saveitem"><span class="ic k-tpl">${IC("seat")}</span><span class="tx"><b>${esc(t.name)}<small>(교실 구조)</small></b><small>${t.cols}열 × ${t.rows}행</small></span><button class="btn" data-act="savedTpl" data-id="${t.id}">불러오기</button></div>`));
+  if(f === "forms") items.length = 0;
+  if(f === "all" || f === "forms") FORM_LIST.forEach(F => items.push(`<div class="saveitem"><span class="ic k-form">${IC("doc")}</span><span class="tx"><b>${esc(F.t)}<small>(서식)</small></b><small>${esc(F.d)}</small></span>${F.file ? `<a class="btn" href="${F.file}" target="_blank" rel="noopener">열기</a>` : `<button class="btn primary" data-act="formOpen" data-k="${F.k}">작성하기</button>`}</div>`));
   const fb = (k, l) => `<button data-act="savedFilter" data-f="${k}" aria-pressed="${f===k}">${l}</button>`;
-  return `<div class="filters">${fb("all","전체")}${fb("seat","시험실 세팅")}${fb("tt","시간표")}${fb("tpl","교실 구조")}</div>
+  return `<div class="filters">${fb("all","전체")}${fb("seat","시험실 세팅")}${fb("tt","시간표")}${fb("tpl","교실 구조")}${fb("forms","서식")}</div>
     <div class="panel" style="padding:0"><div class="savelist">${items.join("") || `<div class="emptybox">아직 저장한 자료가 없어요.</div>`}</div></div>
     <p class="hint" style="margin-top:12px">새 시험을 시작하면 지난 시간표가 자동으로 여기 보관돼요 (최근 30개). 다른 컴퓨터로 옮기려면 <button class="linkbtn" data-view="settings">설정 › 백업</button>을 쓰세요.</p>`;
 }
@@ -885,7 +953,7 @@ function resetAll(){
   state = normalize(emptyState()); seat = null;
   tab = "subjects"; seatTab = "room"; app = "tt"; view = "home";
   selSeat = null; selStu = null; armed = null; savedFilter = "all";
-  ttConfirm = null; genPreview = null; showArchive = false; bookPick = null; bookConfirm = null; bookEdit = null; codeMsg = "";
+  ttConfirm = null; genPreview = null; showArchive = false; bookPick = null; bookConfirm = null; bookEdit = null; codeMsg = ""; formData = {reg:{}, mock:{}};
   pendingImport = null; try { showImportBox(); } catch(e){}
   guideClosed = true; theme = "auto"; applyTheme("auto");
   try { ensureSeat(); } catch(e){}
@@ -976,6 +1044,100 @@ function bookEditorBox(){
     <div class="bookcols">${["1","2","3"].map(g => `<label class="field"><span>${g}학년</span><textarea id="be${g}" data-be="${g}" rows="8" placeholder="공통국어1 (01)&#10;공통수학1 (02)">${esc(B[g])}</textarea></label>`).join("")}</div>
     <div class="row"><button class="btn" data-act="bookFill" title="지금 과목 목록을 그대로 가져와요">지금 과목 목록으로 채우기</button><span style="flex:1"></span><button class="btn primary" data-act="bookSave">저장</button><button class="btn" data-act="bookEditCancel">취소</button></div></div>`;
 }
+
+/* ---------- 서식 (저장함) : 시험 시간 안내 PDF · 정기시험/모의고사 응시현황표 ---------- */
+const LS_FORMS = "exam-forms-v1";
+const FORM_LIST = [
+  {k:"time", t:"교실 게시용 시험 시간 안내", d:"국어·수학·영어·한국사·통사·통과 시간 (B4 가로 2장) · 수정 없이 인쇄해서 써요", file:"forms/exam-time-guide.pdf"},
+  {k:"reg", t:"정기시험 응시현황표", d:"학급별 결시·응시 인원 기록 (A4 세로) · 화면에서 입력하고 인쇄해요"},
+  {k:"mock", t:"모의고사 응시현황표", d:"시험실 문 게시용 (B4 가로) · 화면에서 입력하고 인쇄해요"}
+];
+const FORMS = {
+  reg:  {title:"정기시험 응시현황표", page:"210mm 297mm", auto:["n","absN","takeN"]},
+  mock: {title:"모의고사 응시현황표", page:"364mm 257mm", auto:["n","take"]}
+};
+let formKey = "reg", formData = {reg:{}, mock:{}};
+try { const raw = JSON.parse(localStorage.getItem(LS_FORMS) || "null"); if(raw && typeof raw === "object"){ ["reg","mock"].forEach(k => { if(raw[k] && typeof raw[k] === "object") formData[k] = raw[k]; }); } } catch(e){}
+const formSave = () => { try { localStorage.setItem(LS_FORMS, JSON.stringify(formData)); } catch(e){} };
+const fnums = t => parseNums(String(t || "").replace(/번/g, " "), 99);
+// 번호 범위·결번·결시 번호로 인원을 자동 계산 (직접 고친 칸은 건드리지 않아요)
+function formCalc(k){
+  const d = formData[k], man = d._m || (d._m = {});
+  const a = parseInt(d.from, 10), b = parseInt(d.to, 10), ok = a >= 1 && b >= a;
+  const vac = ok ? fnums(d.out).filter(x => x >= a && x <= b).length : 0;
+  const n = ok ? b - a + 1 - vac : null;
+  const absList = k === "reg" ? [d.sick, d.ok, d.no, d.etc].join(" ") : d.abs;
+  const absCount = new Set(fnums(absList)).size;
+  const hasAbs = String(absList || "").trim() !== "";
+  const res = {};
+  if(!man.n) res.n = n === null ? "" : String(n);
+  const nn = man.n ? parseInt(d.n, 10) : n;
+  if(k === "reg"){
+    if(!man.absN) res.absN = hasAbs ? String(absCount) : (nn !== null && !isNaN(nn) ? "0" : "");
+    const ab = man.absN ? parseInt(d.absN, 10) : (hasAbs ? absCount : 0);
+    if(!man.takeN) res.takeN = (nn !== null && !isNaN(nn) && !isNaN(ab)) ? String(nn - ab) : "";
+  } else {
+    const ab = hasAbs ? absCount : 0;
+    if(!man.take) res.take = (nn !== null && !isNaN(nn)) ? String(nn - ab) : "";
+  }
+  Object.assign(d, res); return res;
+}
+function formRecalc(){
+  const res = formCalc(formKey);
+  Object.keys(res).forEach(f => { const el = document.querySelector(`.paper [data-f="${f}"]`); if(el && el.value !== res[f]) el.value = res[f]; });
+}
+const FDEF = {tag:"본반"};
+const FV = f => { const v = (formData[formKey] || {})[f]; return v !== undefined ? v : (FDEF[f] || ""); };
+const FI = (f, cls, ph) => `<input type="text" class="ff ${cls || ""}" data-f="${f}" value="${esc(FV(f))}" autocomplete="off" ${ph ? `placeholder="${ph}"` : ""}>`;
+const FT = (f, cls) => `<textarea class="ff ${cls || ""}" data-f="${f}" rows="2" autocomplete="off">${esc((formData[formKey] || {})[f] || "")}</textarea>`;
+function regPaper(){
+  return `<div class="paper reg" style="width:210mm;height:296mm"><div class="pp">
+    <div class="regtitle">[${FI("grade","w90")}]학년 [${FI("cls","w90")}]반 응시현황표</div>
+    <div class="regtag">${FI("tag","tagin")}</div>
+    <table class="rtab">
+      <tr class="h70"><th>학급 재적</th><td><div class="cl">${FI("from","w70")}번 ~ ${FI("to","w70")}번 ( ${FI("n","w70 auto")}명 )</div></td></tr>
+      <tr class="h70"><th>결시생 수</th><td><div class="cl">${FI("absN","w70 auto")}명</div></td></tr>
+      <tr class="h58"><th rowspan="4">결시 현황<small>(번호)</small></th><td><div class="cl"><span class="lb">질병:</span>${FI("sick","grow")}</div></td></tr>
+      <tr class="h58"><td><div class="cl"><span class="lb">인정:</span>${FI("ok","grow")}</div></td></tr>
+      <tr class="h58"><td><div class="cl"><span class="lb">미인정:</span>${FI("no","grow")}</div></td></tr>
+      <tr class="h58"><td><div class="cl"><span class="lb">기타:</span>${FI("etc","grow")}</div></td></tr>
+      <tr class="h70"><th>제적(결번)</th><td><div class="cl">${FI("out","grow")}</div></td></tr>
+      <tr class="h70"><th>응시생 수</th><td><div class="cl">${FI("takeN","w70 auto")}명</div></td></tr>
+      <tr class="h130"><th>비고<small>(재적, 응시생수에 포함)</small></th><td><div class="cl"><span class="lb">나래반(번호):</span>${FI("narae","grow")}</div><div class="cl"><span class="lb">분리교사실 응시(번호):</span>${FI("sep","grow")}</div></td></tr>
+    </table></div></div>`;
+}
+function mockPaper(){
+  return `<div class="paper mock" style="width:364mm;height:256mm"><div class="pp"><table class="mtab">
+      <tr class="r1"><th class="yel">학교번호</th><td>${FI("place","big")}</td></tr>
+      <tr class="r2"><th>학급재적</th><td><div class="cl c">${FI("n","w140 auto")}명(번호: ${FI("from","w110")} ~ ${FI("to","w110")} )</div></td></tr>
+      <tr class="r2"><th>응시인원</th><td><div class="cl c">${FI("take","w140 auto")}명</div></td></tr>
+      <tr class="r2"><th>결시자 번호</th><td>${FT("abs","tall")}</td></tr>
+      <tr class="r3"><th>비고</th><td><div class="cl s"><span class="lb">결번:</span>${FI("out","grow")}</div><div class="cl s"><span class="lb">위탁학생:</span>${FI("cons","grow")}</div><div class="cl s"><span class="lb">나래반:</span>${FI("narae","grow")}</div></td></tr>
+    </table></div></div>`;
+}
+function formView(){
+  const P = formKey === "reg" ? regPaper() : mockPaper();
+  return `<div class="formbar"><span class="hint">점선 칸에 입력하세요. 번호 범위를 넣으면 인원이 자동 계산돼요. 직접 고쳐도 돼요.</span><span style="flex:1"></span>
+      <button class="btn ghost danger" data-act="formClear">입력 지우기</button><button class="btn primary" data-act="formPrint">인쇄 · PDF 저장</button></div>
+    <div class="formstage"><div class="paperwrap">${P}</div></div>`;
+}
+function formFit(){
+  const st = document.querySelector(".formstage"), w = document.querySelector(".paperwrap"), p = document.querySelector(".paper");
+  if(!st || !w || !p) return;
+  const pw = p.offsetWidth, ph = p.offsetHeight, s = Math.max(0.45, Math.min(1, (st.clientWidth - 4) / pw));
+  p.style.transform = `scale(${s})`; w.style.width = Math.round(pw * s) + "px"; w.style.height = Math.round(ph * s) + "px";
+}
+function formAfter(){ formRecalc(); formFit(); }
+const pageStyleEl = document.createElement("style"); pageStyleEl.id = "formPageStyle"; document.head.appendChild(pageStyleEl);
+function formPageRule(){ pageStyleEl.textContent = view === "form" ? `@page{size:${FORMS[formKey].page};margin:0}` : ""; }
+window.addEventListener("resize", () => { if(view === "form") formFit(); });
+document.addEventListener("input", e => {
+  const el = e.target, f = el && el.dataset && el.dataset.f;
+  if(!f || view !== "form" || !el.closest(".paper")) return;
+  const d = formData[formKey]; d[f] = el.value;
+  if(FORMS[formKey].auto.includes(f)){ const man = d._m || (d._m = {}); if(el.value.trim() === "") delete man[f]; else man[f] = 1; }
+  formRecalc(); formSave();
+});
 try { const t = localStorage.getItem(LS_STAB); if(["room","place","print"].includes(t)) seatTab = t; } catch(e){}
 
 /* ---------- 저장 (시간표 = app/state, 자리 배치 = app/seats — 서로 다른 문서) ---------- */
@@ -1354,7 +1516,8 @@ function renderNow(){
   renderNav(); updateUndo(); updateStoreInfo(); paintShell();
   try {
     if(view !== "tt" && view !== "seat"){
-      main.innerHTML = view === "home" ? homeView() : view === "saved" ? savedView() : view === "help" ? helpView() : view === "faq" ? faqView() : "";
+      main.innerHTML = view === "home" ? homeView() : view === "saved" ? savedView() : view === "help" ? helpView() : view === "faq" ? faqView() : view === "form" ? formView() : "";
+      if(view === "form") formAfter();
       restoreFocus(fk); return;
     }
     if(app === "seat"){ ensureSeat(); renderSeat(); return; }
@@ -3049,6 +3212,9 @@ main.addEventListener("click", e => {
   if(a === "savedFilter"){ savedFilter = b.dataset.f; return render(); }
   if(a === "savedOpen") return setView(b.dataset.to);
   if(a === "tutorial") return startTutorial(b.dataset.t);
+  if(a === "formOpen"){ formKey = b.dataset.k; return setView("form"); }
+  if(a === "formPrint"){ window.print(); return; }
+  if(a === "formClear"){ if(!armBtn(b, "formclear", "입력 지우기", "한 번 더 누르면 지워요")) return; formData[formKey] = {}; formSave(); return render(); }
   if(a === "bookNew"){ bookEdit = {id:"", title:"", "1":"", "2":"", "3":""}; render(); const c = document.getElementById("bookEditor"); if(c) c.scrollIntoView({block:"nearest"}); return; }
   if(a === "bookEditOpen"){ const B = bookPick && state.customBooks[bookPick]; if(!B) return; bookEdit = {id:bookPick, title:B.title, "1":linesOf(B.data["1"]), "2":linesOf(B.data["2"]), "3":linesOf(B.data["3"])}; render(); const c = document.getElementById("bookEditor"); if(c) c.scrollIntoView({block:"nearest"}); return; }
   if(a === "bookEditCancel"){ bookEdit = null; return render(); }

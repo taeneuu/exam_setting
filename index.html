@@ -621,6 +621,10 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
   .paper input.ff::placeholder{color:transparent}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+.pageview.helpgrid{max-width:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
+.helpgrid .setcard{gap:14px}
+.helpgrid .setcard > div:last-child{margin-top:auto}
+@media (max-width:1100px){.pageview.helpgrid{grid-template-columns:1fr}}
 </style>
 
 <svg width="0"
@@ -879,12 +883,12 @@ function savedView(){
   if(f === "forms") items.length = 0;
   if(f === "all" || f === "forms") FORM_LIST.forEach(F => items.push(`<div class="saveitem" data-form="${F.k}"><span class="ic k-form">${IC("doc")}</span><span class="tx"><b>${esc(F.t)}<small>(서식)</small></b><small>${esc(F.d)}</small></span>${F.file ? `<a class="btn" href="${F.file}" target="_blank" rel="noopener">열기</a>` : `<button class="btn primary" data-act="formOpen" data-k="${F.k}">작성하기</button>`}</div>`));
   const fb = (k, l) => `<button data-act="savedFilter" data-f="${k}" aria-pressed="${f===k}">${l}</button>`;
-  return `<div class="filters">${fb("all","전체")}${fb("seat","시험실 세팅")}${fb("tt","시간표")}${fb("tpl","교실 구조")}${fb("forms","서식")}</div>
+  return `<div class="filters">${fb("all","전체")}${fb("forms","서식")}${fb("seat","시험실 세팅")}${fb("tt","시간표")}${fb("tpl","교실 구조")}</div>
     <div class="panel" style="padding:0"><div class="savelist">${items.join("") || `<div class="emptybox">아직 저장한 자료가 없어요.</div>`}</div></div>
     <p class="hint" style="margin-top:12px">새 시험을 시작하면 지난 시간표가 자동으로 여기 보관돼요 (최근 30개). 다른 컴퓨터로 옮기려면 <button class="linkbtn" data-view="settings">설정 › 백업</button>을 쓰세요.</p>`;
 }
 function helpView(){
-  return `<div class="pageview">
+  return `<div class="pageview helpgrid">
     <div class="panel setcard"><h2 class="sec">시험실 세팅 (자리 배치도)</h2><ol class="steps">
       <li><div><b>시험실 정보</b><span>시험실 이름, 응시 학년·반·번호와 결번을 넣어요.</span></div></li>
       <li><div><b>좌석 배치</b><span>자동으로 앉혀져요. 바꿀 자리만 눌러서 고치세요.</span></div></li>
@@ -895,7 +899,7 @@ function helpView(){
       <li><div><b>시간표 입력</b><span>시험 기간을 정하면 평일이 자동으로 채워져요. 교시마다 과목을 고르세요.</span></div></li>
       <li><div><b>출력</b><span>교실별 시간표를 미리보고 PDF로 저장해요.</span></div></li></ol>
       <div><button class="btn primary" data-act="tutorial" data-t="tt">시간표 만들기 튜토리얼 시작</button></div></div>
-    <div class="panel setcard"><h2 class="sec">저장함 · 서식</h2><ol class="steps"><li><div><b>서식 열기</b><span>시간 안내 PDF는 열어서 인쇄하고, 응시현황표는 작성하기로 입력해요.</span></div></li><li><div><b>인쇄 · PDF 저장</b><span>입력한 서식을 그대로 인쇄하거나 PDF로 저장해요.</span></div></li></ol><div><button class="btn primary" data-act="tutorial" data-t="saved">저장함·서식 튜토리얼 시작</button></div></div></div>`;
+    <div class="panel setcard"><h2 class="sec">저장함 · 서식</h2><ol class="steps"><li><div><b>서식 열기</b><span>시험 시간표 PDF는 열어서 인쇄하고, 응시현황표는 작성하기로 입력해요.</span></div></li><li><div><b>인쇄 · PDF 저장</b><span>입력한 서식을 그대로 인쇄하거나 PDF로 저장해요.</span></div></li></ol><div><button class="btn primary" data-act="tutorial" data-t="saved">저장함·서식 튜토리얼 시작</button></div></div></div>`;
 }
 function faqView(){
   const Q = (q, a) => `<details class="faq"><summary>${q}</summary><p>${a}</p></details>`;
@@ -981,7 +985,7 @@ const TUTORIALS = {
     {tab:"output", sel:"[data-act=pdfSel]", t:"PDF 저장", x:"교실별 미리보기를 확인하고 PDF로 저장해요."}]},
   saved: {title:"저장함 · 서식", app:"saved", steps:[
     {view:"saved", sel:".filters", t:"저장함", x:"만들어 둔 시험실 세팅·시간표·교실 구조와 서식이 모여 있어요. 위의 버튼으로 골라 볼 수 있어요."},
-    {view:"saved", sel:"[data-form=time]", t:"시험 시간 안내", x:"교실 게시용 PDF예요. ‘열기’를 누르면 새 탭에서 열리고, 거기서 바로 인쇄해요. 고칠 필요는 없어요."},
+    {view:"saved", sel:"[data-form=time]", t:"모의고사 시험 시간표", x:"교실 게시용 PDF예요. ‘열기’를 누르면 새 탭에서 열리고, 거기서 바로 인쇄해요. 고칠 필요는 없어요."},
     {view:"saved", sel:"[data-form=reg]", t:"정기시험 응시현황표", x:"‘작성하기’를 누르면 화면에서 바로 입력할 수 있어요."},
     {view:"saved", sel:"[data-form=mock]", t:"모의고사 응시현황표", x:"시험실 문에 붙이는 B4 가로 서식이에요. 작성 방법은 정기시험과 같아요."},
     {view:"form", form:"reg", sel:".paper", t:"서식 입력", x:"점선 칸에 입력해요. 번호 범위·결번·결시 번호를 넣으면 재적·결시·응시 인원이 자동 계산돼요(파란 글씨). 직접 고치면 그 값이 우선이에요."},
@@ -1072,7 +1076,7 @@ function bookEditorBox(){
 /* ---------- 서식 (저장함) : 시험 시간 안내 PDF · 정기시험/모의고사 응시현황표 ---------- */
 const LS_FORMS = "exam-forms-v1";
 const FORM_LIST = [
-  {k:"time", t:"교실 게시용 시험 시간 안내", d:"국어·수학·영어·한국사·통사·통과 시간 (B4 가로 2장) · 수정 없이 인쇄해서 써요", file:"forms/exam-time-guide.pdf"},
+  {k:"time", t:"모의고사 시험 시간표", d:"국어·수학·영어·한국사·통사·통과 시간 (B4 가로 2장) · 수정 없이 인쇄해서 써요", file:"forms/exam-time-guide.pdf"},
   {k:"reg", t:"정기시험 응시현황표", d:"학급별 결시·응시 인원 기록 (A4 세로) · 화면에서 입력하고 인쇄해요"},
   {k:"mock", t:"모의고사 응시현황표", d:"시험실 문 게시용 (B4 가로) · 화면에서 입력하고 인쇄해요"}
 ];

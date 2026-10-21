@@ -625,6 +625,14 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .helpgrid .setcard{gap:14px}
 .helpgrid .setcard > div:last-child{margin-top:auto}
 @media (max-width:1100px){.pageview.helpgrid{grid-template-columns:1fr}}
+#printHost{display:none}
+@media print{
+  html.psheet,html.psheet body{margin:0!important;padding:0!important;background:#fff!important;height:auto!important}
+  html.psheet body > *:not(#printHost){display:none!important}
+  html.psheet #printHost{display:block!important}
+  #printHost img{display:block;break-after:page;page-break-after:always}
+  #printHost img:last-child{break-after:auto;page-break-after:auto}
+}
 </style>
 
 <svg width="0"
@@ -975,14 +983,14 @@ const TUTORIALS = {
     {tab:"room", sel:"#structBox", t:"교실 구조", x:"좌석 열·행 수와 출입문 위치를 실제 교실에 맞춰요. 저장해 두면 다음 시험에도 불러 쓸 수 있어요."},
     {tab:"place", sel:".sstats", t:"배치 결과 요약", x:"학생은 자동으로 앉혀져요. 미배정·중복 배정이 0명인지만 확인하세요."},
     {tab:"place", sel:".classroom-wrap", t:"좌석 고치기", x:"바꿀 자리만 눌러서 서로 바꿔요. 직접 고친 자리는 그대로 유지돼요."},
-    {tab:"print", sel:"[data-sact=spdfAll]", t:"PDF 저장", x:"미리보기를 확인하고 PDF로 저장하면 끝이에요."}]},
+    {tab:"print", sel:"[data-sact=spdfAll]", t:"인쇄 · PDF 저장", x:"미리보기를 확인하고 누르면 인쇄 창이 바로 열려요. 인쇄하거나 ‘PDF로 저장’을 고르면 끝이에요."}]},
   tt: {title:"시간표 만들기", app:"tt", demo:"tt", steps:[
     {tab:"subjects", sel:".roomrow", t:"교실 구성", x:"교실마다 함께 시험 보는 학년을 정해요. 한 학년만 응시하면 오른쪽 학년을 ‘없음’으로 두세요."},
     {tab:"subjects", sel:".codebook", t:"과목코드표", x:"학기 코드표를 고르거나 ‘내 코드표 만들기’로 직접 등록할 수 있어요."},
     {tab:"subjects", sel:".grades", t:"학년별 과목", x:"학년마다 과목과 코드가 들어 있어요. 과목을 더하거나 지울 수 있고, 여러 과목을 한꺼번에 붙여 넣을 수도 있어요."},
     {tab:"schedule", sel:"#rangeStart", t:"시험 기간", x:"시작일과 종료일을 넣고 ‘평일 자동 생성’을 누르면 날짜가 채워져요."},
     {tab:"schedule", sel:"table.grid", t:"교시별 과목", x:"교시마다 학년별 과목을 골라요. 과목 옆 ＋로 선택과목을 더 넣을 수 있어요."},
-    {tab:"output", sel:"[data-act=pdfSel]", t:"PDF 저장", x:"교실별 미리보기를 확인하고 PDF로 저장해요."}]},
+    {tab:"output", sel:"[data-act=pdfSel]", t:"인쇄 · PDF 저장", x:"교실별 미리보기를 확인하고 누르면 인쇄 창이 바로 열려요. 인쇄하거나 ‘PDF로 저장’을 고르세요."}]},
   saved: {title:"저장함 · 서식", app:"saved", steps:[
     {view:"saved", sel:".filters", t:"저장함", x:"만들어 둔 시험실 세팅·시간표·교실 구조와 서식이 모여 있어요. 위의 버튼으로 골라 볼 수 있어요."},
     {view:"saved", sel:"[data-form=time]", t:"모의고사 시험 시간표", x:"교실 게시용 PDF예요. ‘열기’를 누르면 새 탭에서 열리고, 거기서 바로 인쇄해요. 고칠 필요는 없어요."},
@@ -2081,7 +2089,7 @@ function outputView(){
   const pv = sel.map(({r, sheets}) => `<section class="panel">
       <div class="pv-head"><h3>${esc(r.label || "교실")}</h3><span class="meta">${roomGr(r).map(g => g + "학년").join(" + ")} · ${sheets.length}장</span>
         <span class="spacer"></span>
-        <button class="btn" data-act="pdfRoom" data-id="${r.id}" ${sheets.length?"":"disabled"}>이 교실 PDF 저장</button></div>
+        <button class="btn" data-act="pdfRoom" data-id="${r.id}" ${sheets.length?"":"disabled"}>이 교실 인쇄 · PDF 저장</button></div>
       ${sheets.length ? `<div class="pages">${sheets.map((s,i) => `<div class="page"><canvas data-room="${r.id}" data-i="${i}" aria-label="${esc(s.dateLabel)} 시간표"></canvas><div class="cap">${i+1}쪽 · ${esc(s.dateLabel)}</div></div>`).join("")}</div>`
         : `<p class="hint">이 두 학년이 시험 보는 교시가 아직 없어요.</p>`}
     </section>`).join("");
@@ -2114,10 +2122,10 @@ function outputView(){
         <div>${targets}</div>
         <button class="linkbtn" data-goto="subjects">교실 구성 바꾸기</button>
         <div class="row" style="margin-top:4px">
-          <button class="btn primary" data-act="pdfSel" ${selTotal && window.jspdf ? "" : "disabled"} title="${!window.jspdf ? "PDF 도구를 불러오지 못했어요" : selTotal ? "" : "체크한 교실에 출력할 시간표가 없어요"}">체크한 교실 PDF 저장 · ${selTotal}장</button>
-          <button class="btn" data-act="pdfAll" ${total && window.jspdf ? "" : "disabled"} title="${!window.jspdf ? "PDF 도구를 불러오지 못했어요" : total ? "" : "출력할 시간표가 없어요 — 시간표 입력에서 과목을 넣으세요"}">전체 교실 PDF 저장 · ${total}장</button>
+          <button class="btn primary" data-act="pdfSel" ${selTotal ? "" : "disabled"} title="${selTotal ? "" : "체크한 교실에 출력할 시간표가 없어요"}">체크한 교실 인쇄 · PDF 저장 · ${selTotal}장</button>
+          <button class="btn" data-act="pdfAll" ${total ? "" : "disabled"} title="${total ? "" : "출력할 시간표가 없어요 — 시간표 입력에서 과목을 넣으세요"}">전체 교실 인쇄 · PDF 저장 · ${total}장</button>
         </div>
-        <p class="hint">한 파일 안에서 교실 순서대로 묶이고, PDF 책갈피로 교실이 구분돼요. 인쇄할 때는 ${state.paper} 용지에 '실제 크기'로 출력하세요.</p>
+        <p class="hint">누르면 인쇄 창이 바로 열려요. 프린터를 고르면 인쇄되고, ‘PDF로 저장’을 고르면 파일로 저장돼요. ${state.paper} 용지, 배율 100%(실제 크기)로 출력하세요.</p>
         <div id="pdfMsg"></div>
       </div>
     </aside>
@@ -2425,7 +2433,9 @@ function layout(r){
   return {map, ros, byKey, pool: ros.filter(s => !placed.has(s.key)), seq: seatSeq(r)};
 }
 function materialize(r){ if(!r.assign) r.assign = Object.assign({}, layout(r).map); }
+const tagsOn = r => r.type === "cross";
 function colTags(r){
+  if(!tagsOn(r)) return [];
   const out = [];
   for(let c = 0; c < r.cols; c++){
     const ts = []; for(let y = 0; y < r.rows; y++){ const cell = r.cells[y*r.cols + c]; if(!cell.off) ts.push(cell.tag); }
@@ -2544,7 +2554,7 @@ function seatRoomView(){
             <button class="btn" data-sact="genGrid">좌석 구조 생성</button></div>
           <div class="row"><span class="lbl2">출입문</span><select id="rdoor" data-sf="door">${[["r","오른쪽"],["l","왼쪽"],["none","표시 안 함"]].map(([v,l]) => `<option value="${v}" ${v===r.door?"selected":""}>${l}</option>`).join("")}</select>
             <span class="hint">앞 = 교탁 쪽</span></div>
-          <p class="hint">이동·고정 표시와 사용 안 하는 자리는 <button class="linkbtn" data-sgoto="place">학생·좌석 배치</button>에서 좌석을 눌러 정해요.</p>
+          <p class="hint">${r.type === "cross" ? "이동·고정 표시와 사용 안 하는 자리는" : "사용 안 하는 자리는"} <button class="linkbtn" data-sgoto="place">학생·좌석 배치</button>에서 좌석을 눌러 정해요.</p>
           <div class="tpl">
             <button class="btn" data-sact="saveTpl">이 교실 구조 저장</button>
             ${seat.templates.length ? `<select id="tplSel" aria-label="저장한 교실 구조">${tplOpts}</select><button class="btn" data-sact="loadTpl">기존 교실 구조 불러오기</button><button class="btn ghost danger" data-sact="delTpl">삭제</button>` : `<span class="hint">저장한 구조가 아직 없어요.</span>`}
@@ -2563,16 +2573,16 @@ function seatRoomView(){
 }
 function editorHTML(r, L){
   const dupSeats = new Set(); if(r.assign){ const w = {}; Object.keys(r.assign).forEach(k => { if(usable(r,+k)) (w[r.assign[k]] = w[r.assign[k]] || []).push(+k); }); Object.values(w).forEach(l => { if(l.length > 1) l.forEach(i => dupSeats.add(i)); }); }
-  const C = r.cols, R = r.rows, P = r.pair, top = r.desk !== "bottom", ct = colTags(r);
+  const C = r.cols, R = r.rows, P = r.pair, top = r.desk !== "bottom", ct = colTags(r), TG = tagsOn(r);
   const tpl = []; for(let c = 0; c < C; c++){ if(c > 0 && c % P === 0) tpl.push("18px"); tpl.push("minmax(66px,1fr)"); }
   const gc = c => c + Math.floor(c/P) + 1;
   let h = "";
-  for(let c = 0; c < C; c++){
+  if(TG) for(let c = 0; c < C; c++){
     const t = ct[c];
     h += `<button class="colhead ${t?"on":""}" style="grid-column:${gc(c)};grid-row:${top?1:R+1}" data-sact="colTag" data-c="${c}" title="이 열 전체를 이동 → 고정 → 표시 없음 순서로 바꿔요" aria-label="${c+1}열 표시: ${t||"없음"}">${t || "이동·고정"}</button>`;
   }
   for(let y = 0; y < R; y++) for(let c = 0; c < C; c++){
-    const i = y*C + c, cell = r.cells[i], row = top ? y + 2 : (R-1-y) + 1;
+    const i = y*C + c, cell = r.cells[i], row = top ? y + 1 + (TG ? 1 : 0) : (R-1-y) + 1;
     const key = L.map[i], s = key ? L.byKey[key] : null;
     const cls = ["seat"];
     if(cell.off) cls.push("off"); else if(cell.hold) cls.push("hold");
@@ -2580,11 +2590,11 @@ function editorHTML(r, L){
     if(selSeat === i) cls.push("sel");
     if(dupSeats.has(i)) cls.push("err");
     if(c % P !== 0 && !cell.off && !r.cells[i-1].off) cls.push("jl");
-    const tg = !cell.off && cell.tag && !ct[c] ? `<span class="tg">${cell.tag}</span>` : "";
+    const tg = TG && !cell.off && cell.tag && !ct[c] ? `<span class="tg">${cell.tag}</span>` : "";
     const body = cell.off ? `<span class="x">사용 안 함</span>` : cell.hold ? `<span class="hl">결번</span>` : s ? `<span class="no">${s.key}</span>${s.absent ? `<span class="ab">결번</span>` : ""}` : `<span class="em">빈 자리</span>`;
     const what = cell.off ? "사용 안 함" : cell.hold ? "결번 자리" : s ? s.key + (s.absent ? " 결번" : "") : "빈 자리";
     const selMark = selSeat === i ? `<span class="selmark" aria-hidden="true">✔ 선택</span>` : "";
-    h += `<button class="${cls.join(" ")}" style="grid-column:${gc(c)};grid-row:${row}" data-sact="seat" data-i="${i}" aria-pressed="${selSeat === i}" aria-label="${y+1}번째 줄 ${c+1}열 ${what}${cell.tag?" "+cell.tag:""}${selSeat === i ? " (선택됨)" : ""}">${tg}${body}${selMark}</button>`;
+    h += `<button class="${cls.join(" ")}" style="grid-column:${gc(c)};grid-row:${row}" data-sact="seat" data-i="${i}" aria-pressed="${selSeat === i}" aria-label="${y+1}번째 줄 ${c+1}열 ${what}${TG && cell.tag?" "+cell.tag:""}${selSeat === i ? " (선택됨)" : ""}">${tg}${body}${selMark}</button>`;
   }
   const door = r.door === "none" ? "" : `<span class="door ${r.door} up">출입문</span><span class="door ${r.door} down">출입문</span>`;
   const desk = `<div class="desk">교탁</div>`;
@@ -2628,7 +2638,7 @@ function seatPlaceView(){
         ${r.mode === "manual" && hasManual(r) ? `<button class="btn danger" data-sact="clearAll" title="이 교실의 배정만 모두 비워요. 다른 교실은 그대로예요">이 교실 배정 모두 비우기</button>` : ""}</div>
       <div class="row"><span class="lbl2">1번 시작</span>${radios("rstart","start",r.start,[["left","왼쪽 앞에서 → 뒤로, 오른쪽으로"],["right","오른쪽 앞에서 → 뒤로, 왼쪽으로"]])}</div>
       <div class="row"><span class="lbl2">좌석 누르면</span><div class="seg sm" role="radiogroup" aria-label="좌석을 누를 때 할 일">${brushes.map(([v,l]) => `<label><input type="radio" name="brush" id="brush-${v}" data-brush="${v}" value="${v}" ${v===brush?"checked":""}> ${l}</label>`).join("")}</div>${qtip("<b>학생 자리 바꾸기</b>: 두 좌석을 차례로 누르면 학생이 서로 바뀌어요.<br><b>결번 자리로 비우기</b>: 그 좌석을 비워 두고 배치도에 ‘결번’으로 찍어요(학생은 다음 빈 자리로).<br><b>사용 안 하는 좌석</b>: 고장 난 책상처럼 아예 쓰지 않는 자리예요. 배치도에 그리지 않아요.")}</div>
-      <div class="row"><span class="lbl2">이동·고정</span><button class="btn" data-sact="altTags">열마다 이동·고정 번갈아</button><button class="btn" data-sact="altTags2">열마다 고정·이동 번갈아</button><button class="btn ghost" data-sact="clearTags">표시 모두 지우기</button><span class="hint">열 위의 칸을 눌러 열 단위로도 바꿀 수 있어요.</span></div>
+      ${tagsOn(r) ? `<div class="row"><span class="lbl2">이동·고정</span><button class="btn" data-sact="altTags">열마다 이동·고정 번갈아</button><button class="btn" data-sact="altTags2">열마다 고정·이동 번갈아</button><button class="btn ghost" data-sact="clearTags">표시 모두 지우기</button><span class="hint">열 위의 칸을 눌러 열 단위로도 바꿀 수 있어요.</span></div>` : ""}
       <p class="hint"><b class="modenow">지금 모드: ${(brushes.find(x => x[0] === brush) || brushes[0])[1]}</b> — ${brush === "swap" ? "좌석 하나를 누르고(✔ 선택 표시) 바꿀 좌석을 누르세요. 빈 자리를 누르면 그쪽으로 옮겨져요. 선택을 풀려면 같은 좌석을 다시 누르거나 ‘취소’를 누르세요." : "누른 좌석에 바로 적용돼요. 한 번 더 누르면 해제돼요. 학생을 옮기려면 ‘학생 자리 바꾸기’로 돌아가세요."} ${r.assign ? "<b>직접 고친 배치</b>예요 — 결번·인원을 바꿔도 다른 학생 자리는 그대로이고, 새로 생긴 학생은 ‘자리 없는 학생’으로 가요." : "지금은 <b>자동 배치</b>예요 — 결번·좌석을 바꾸면 이 교실 배치가 자동으로 다시 계산돼요. 자리를 직접 바꾸면 그때부터 고정돼요."} 배치 방식을 바꿀 때 직접 고친 자리가 있으면 먼저 물어봐요.</p>
     </div>
     ${seatStatsHTML(r, L)}
@@ -2665,7 +2675,7 @@ function seatPrintView(){
         ${x.L.pool.length ? `<span class="meta" style="color:var(--warn);font-weight:600">자리 없는 학생 ${x.L.pool.length}명</span>` : ""}
         <span class="spacer"></span>
         <button class="btn ghost" data-sact="editRoom" data-rid="${x.r.id}">자리 고치기</button>
-        <button class="btn" data-sact="spdfRoom" data-rid="${x.r.id}">이 시험실 PDF 저장</button></div>
+        <button class="btn" data-sact="spdfRoom" data-rid="${x.r.id}">이 시험실 인쇄 · PDF 저장</button></div>
       ${(() => { const c = seatCheck(x.r).filter(i => i.lv === "err"); return c.length ? `<div class="checks" style="margin-bottom:10px">${c.map(i => `<div class="ck err"><span class="tag">오류</span><span>${esc(i.msg)}</span><button class="linkbtn go" data-sact="goFix" data-tab="${i.go.tab}" data-rid="${x.r.id}" data-id="${i.go.id || ""}" data-i="${i.go.i ?? ""}">고치러 가기</button></div>`).join("")}</div>` : ""; })()}
       <div class="page"><canvas data-seatroom="${x.r.id}" aria-label="${esc(x.r.label)} 자리 배치도"></canvas></div>
     </section>`).join("");
@@ -2690,8 +2700,8 @@ function seatPrintView(){
         <h2 class="sec">출력 대상 <small class="hint" style="font-weight:400">시험실 자리 배치도</small></h2>
         <div>${targets}</div>
         <div class="row" style="margin-top:4px">
-          <button class="btn primary" data-sact="spdfSel" ${sel.length && window.jspdf ? "" : "disabled"} title="${!window.jspdf ? "PDF 도구를 불러오지 못했어요" : sel.length ? "" : "출력 대상에서 시험실을 하나 이상 고르세요"}">체크한 시험실 PDF 저장 · ${sel.length}장</button>
-          <button class="btn" data-sact="spdfAll" ${window.jspdf ? "" : "disabled"} title="${window.jspdf ? "" : "PDF 도구를 불러오지 못했어요"}">전체 ${seat.rooms.length}개 시험실 PDF 저장 · ${seat.rooms.length}장</button>
+          <button class="btn primary" data-sact="spdfSel" ${sel.length ? "" : "disabled"} title="${sel.length ? "" : "출력 대상에서 시험실을 하나 이상 고르세요"}">체크한 시험실 인쇄 · PDF 저장 · ${sel.length}장</button>
+          <button class="btn" data-sact="spdfAll">전체 ${seat.rooms.length}개 시험실 인쇄 · PDF 저장 · ${seat.rooms.length}장</button>
         </div>
         ${(() => { const ne = sel.reduce((n,x) => n + seatCheck(x.r).filter(c => c.lv === "err").length, 0), nw = sel.reduce((n,x) => n + seatCheck(x.r).filter(c => c.lv === "warn").length, 0);
           return ne ? `<div class="warnline"><b>출력 전 오류 ${ne}건</b>이 있어요. 각 시험실 미리보기 위에서 확인하세요.${nw ? ` (확인 필요 ${nw}건은 ‘학생·좌석 배치’ 점검에서 볼 수 있어요)` : ""}</div>` : `<span class="okmark">✓ 체크한 시험실에 오류가 없어요${nw ? ` · 확인 필요 ${nw}건` : ""}</span>`; })()}
@@ -2815,7 +2825,7 @@ function drawSeatSheet(ctx, W, H, r, title, teacher){
       ctx.restore();
     }
     ctx.lineWidth = 2.2*U; ctx.strokeStyle = "#000"; ctx.strokeRect(x, yy, cw, ch);
-    const tg = cell.tag && !ct[c] ? cell.tag : "";
+    const tg = tagsOn(r) && cell.tag && !ct[c] ? cell.tag : "";
     if(tg) T(tg, x + 6*U, yy + Math.min(12*U, ch*0.17), cw*0.6, Math.min(13*U, ch*0.21), {w:700, fam:SFB, align:"left", color:"#222"});
     const ncy = yy + ch*(tg ? 0.57 : 0.5);
     if(cell.hold) T("결번", x + cw/2, ncy, cw*0.8, Math.min(20*U, ch*0.3), {w:700, fam:SFB, color:"#555"});
@@ -2864,11 +2874,11 @@ async function deliver(blob, filename, say){
 /* ---------- PDF 생성 공통: 준비 중 → 생성 중 → 완료/실패, 생성 중 중복 클릭 방지 ---------- */
 let pdfBusy = false;
 const webFontLoaded = fam => { try { return [...document.fonts].some(f => f.family.replace(/["']/g,"") === fam && f.status === "loaded"); } catch(e){ return true; } };
-async function runPdf(msgId, work){
+async function runPdf(msgId, work, noLib){
   const msg = document.getElementById(msgId);
   const say = (t, err) => { const m = document.getElementById(msgId) || msg; if(m) m.innerHTML = t ? `<div class="msg ${err?"err":""}" role="status">${esc(t)}</div>` : ""; };
   if(pdfBusy){ say("이미 PDF를 만들고 있어요. 끝날 때까지 기다려 주세요."); return; }
-  if(!window.jspdf){ say("PDF 도구(jsPDF)를 불러오지 못해 PDF를 만들 수 없어요. 인터넷 연결을 확인하고 페이지를 새로고침해 주세요. 미리보기는 그대로 볼 수 있어요.", true); return; }
+  if(!noLib && !window.jspdf){ say("PDF 도구(jsPDF)를 불러오지 못해 PDF를 만들 수 없어요. 인터넷 연결을 확인하고 페이지를 새로고침해 주세요. 미리보기는 그대로 볼 수 있어요.", true); return; }
   pdfBusy = true;
   const btns = [...document.querySelectorAll('[data-act^="pdf"],[data-sact^="spdf"]')], prev = btns.map(b => b.disabled);
   btns.forEach(b => { b.disabled = true; b.setAttribute("aria-busy","true"); });
@@ -2906,6 +2916,56 @@ async function saveSeatPdf(rooms, filename){
     if(ok){ seat.printed = {sig: sigOf(seat), at: new Date().toISOString()}; commitSeat(false); renderNav(); }
     return ok;
   });
+}
+/* ---------- 인쇄 · PDF 저장: 시트를 그려 인쇄 창을 바로 엶 (프린터 또는 ‘PDF로 저장’) ---------- */
+function printImages(urls, P){
+  return new Promise(resolve => {
+    const host = document.createElement("div"); host.id = "printHost";
+    host.innerHTML = urls.map(u => `<img src="${u}" alt="" style="width:${P.w}mm;height:${P.h}mm">`).join("");
+    document.body.appendChild(host);
+    const st = document.createElement("style"); st.id = "sheetPageStyle"; st.textContent = `@page{size:${P.w}mm ${P.h}mm;margin:0}`; document.head.appendChild(st);
+    document.documentElement.classList.add("psheet");
+    let fin = false;
+    const done = () => { if(fin) return; fin = true; window.removeEventListener("afterprint", done); document.documentElement.classList.remove("psheet"); host.remove(); st.remove(); resolve(true); };
+    window.addEventListener("afterprint", done);
+    Promise.all([...host.querySelectorAll("img")].map(i => i.decode ? i.decode().catch(() => {}) : null)).then(() => setTimeout(() => { try { window.print(); } catch(e){ done(); } }, 60));
+  });
+}
+const PRINT_DONE = "완료 — 인쇄 창이 열렸어요. 프린터를 고르면 인쇄되고, ‘PDF로 저장’을 고르면 파일로 저장돼요.";
+async function printTT(rooms){
+  return runPdf("pdfMsg", async say => {
+    const sheets = rooms.map(r => buildSheets(r)).flat();
+    if(!sheets.length){ say("출력할 시간표가 없어요. 출력 대상 교실과 시간표 입력을 확인하세요.", true); return false; }
+    say("준비 중… 글꼴을 불러오고 있어요");
+    await ensureFont(state.font, sheets.map(sheetText).join(""));
+    const P = PAPERS[state.paper], dpi = 200, W = Math.round(P.w/25.4*dpi), H = Math.round(P.h/25.4*dpi);
+    const cv = document.createElement("canvas"); cv.width = W; cv.height = H; const ctx = cv.getContext("2d"), urls = [];
+    for(let i = 0; i < sheets.length; i++){
+      say(`준비 중… ${i+1} / ${sheets.length}장`); await tick();
+      drawSheet(ctx, W, H, sheets[i], state.font); urls.push(cv.toDataURL("image/jpeg", 0.93));
+    }
+    say("인쇄 창을 여는 중…");
+    state.printed = {sig: sigOf(state), at: new Date().toISOString()}; commit(false); renderNav();
+    await printImages(urls, P);
+    say(PRINT_DONE); return true;
+  }, true);
+}
+async function printSeat(rooms){
+  return runPdf("spdfMsg", async say => {
+    if(!rooms.length){ say("출력할 시험실이 없어요. 출력 대상에서 시험실을 고르세요.", true); return false; }
+    say("준비 중… 글꼴을 불러오고 있어요");
+    await ensureSeatFonts(seatFontText());
+    const P = PAPERS[seat.paper], dpi = 200, W = Math.round(P.w/25.4*dpi), H = Math.round(P.h/25.4*dpi);
+    const cv = document.createElement("canvas"); cv.width = W; cv.height = H; const ctx = cv.getContext("2d"), urls = [];
+    for(let i = 0; i < rooms.length; i++){
+      say(`준비 중… ${i+1} / ${rooms.length}장`); await tick();
+      drawSeatSheet(ctx, W, H, rooms[i], seat.examTitle, !!seat.teacher); urls.push(cv.toDataURL("image/jpeg", 0.93));
+    }
+    say("인쇄 창을 여는 중…");
+    seat.printed = {sig: sigOf(seat), at: new Date().toISOString()}; commitSeat(false); renderNav();
+    await printImages(urls, P);
+    say(PRINT_DONE); return true;
+  }, true);
 }
 function seatPdfName(suffix){
   const base = (seat.examTitle || "").trim() || "시험";
@@ -3099,9 +3159,9 @@ function onSeatClick(b){
   if(a === "spdfRoom" || a === "spdfAll" || a === "spdfSel"){
     const rs = a === "spdfRoom" ? seat.rooms.filter(y => y.id === b.dataset.rid) : a === "spdfAll" ? seat.rooms : seat.rooms.filter(x => x.print !== false);
     const ne = rs.reduce((n, x) => n + seatCheck(x).filter(c => c.lv === "err").length, 0);
-    if(ne){ const ok = armBtn(b, "spdf"+a+(b.dataset.rid||""), b.textContent, `오류 ${ne}건 — 그래도 저장하려면 한 번 더`, 6000); pdfBlockNote("spdfMsg", ok ? 0 : ne, rs.map(x => seatCheck(x).find(c => c.lv === "err")).find(Boolean)); if(!ok) return; }
+    if(ne){ const ok = armBtn(b, "spdf"+a+(b.dataset.rid||""), b.textContent, `오류 ${ne}건 — 그래도 인쇄하려면 한 번 더`, 6000); pdfBlockNote("spdfMsg", ok ? 0 : ne, rs.map(x => seatCheck(x).find(c => c.lv === "err")).find(Boolean)); if(!ok) return; }
     const name = a === "spdfRoom" ? (rs[0] && rs[0].label || "교실") : (rs.length === seat.rooms.length ? "전체" : rs.map(x => x.label || "교실").join("+"));
-    saveSeatPdf(rs, seatPdfName(name)); return;
+    printSeat(rs, seatPdfName(name)); return;
   }
 }
 function onSeatChange(t){
@@ -3422,10 +3482,10 @@ main.addEventListener("click", e => {
   }
   if(a === "pdfRoom" || a === "pdfAll" || a === "pdfSel"){
     const ne = ttCheck().filter(x => x.lv === "err").length;
-    if(ne){ const ok = armBtn(b, "pdf"+a+(b.dataset.id||""), b.textContent, `오류 ${ne}건 — 그래도 저장하려면 한 번 더`, 6000); pdfBlockNote("pdfMsg", ok ? 0 : ne, ttCheck().filter(x => x.lv === "err")[0]); if(!ok) return; }
-    if(a === "pdfRoom"){ const r = state.rooms.find(x => x.id === b.dataset.id); savePdf([r], pdfName(`${r.label||"교실"}(${roomGr(r).join("·")}학년)`)); return; }
-    if(a === "pdfAll"){ savePdf(state.rooms, pdfName("전체")); return; }
-    const rs = state.rooms.filter(r => r.print !== false); savePdf(rs, pdfName(rs.length === state.rooms.length ? "전체" : rs.map(r => r.label || "교실").join("+"))); return;
+    if(ne){ const ok = armBtn(b, "pdf"+a+(b.dataset.id||""), b.textContent, `오류 ${ne}건 — 그래도 인쇄하려면 한 번 더`, 6000); pdfBlockNote("pdfMsg", ok ? 0 : ne, ttCheck().filter(x => x.lv === "err")[0]); if(!ok) return; }
+    if(a === "pdfRoom"){ const r = state.rooms.find(x => x.id === b.dataset.id); printTT([r], pdfName(`${r.label||"교실"}(${roomGr(r).join("·")}학년)`)); return; }
+    if(a === "pdfAll"){ printTT(state.rooms, pdfName("전체")); return; }
+    const rs = state.rooms.filter(r => r.print !== false); printTT(rs, pdfName(rs.length === state.rooms.length ? "전체" : rs.map(r => r.label || "교실").join("+"))); return;
   }
 });
 main.addEventListener("input", e => {
